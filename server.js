@@ -14,6 +14,7 @@ const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname)); // also serve index.html from repo root
 
 // ---------- Helpers ----------
 function ensureData() {
@@ -206,7 +207,11 @@ app.get('/api/admin/stats', authAdmin, (req, res) => {
 
 // SPA fallback
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const fromPublic = path.join(__dirname, 'public', 'index.html');
+  const fromRoot = path.join(__dirname, 'index.html');
+  if (fs.existsSync(fromPublic)) return res.sendFile(fromPublic);
+  if (fs.existsSync(fromRoot)) return res.sendFile(fromRoot);
+  res.status(404).send('Not Found - index.html missing. Upload index.html to the repo.');
 });
 
 app.listen(PORT, () => {
