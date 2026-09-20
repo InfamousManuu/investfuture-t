@@ -1,0 +1,16 @@
+{
+  "name": "invest-future",
+  "version": "1.0.0",
+  "description": "Invest Future platform with admin backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "cors": "^2.8.5",
+    "bcryptjs": "^2.4.3",
+    "uuid": "^10.0.0"
+  }
+}

@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invest Future – Private Capital Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0b1c2c;
+      --navy-light: #12263a;
+      --navy-card: #152a40;
+      --cream: #f5f0e8;
+      --cream-dark: #e8e0d4;
+      --gold: #c9a227;
+      --green: #22c55e;
+      --text-dark: #1a1a1a;
+      --text-muted: #6b7280;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; }
+
+    /* ========== SHARED HEADER ========== */
+    .header {
+      background: var(--navy);
+      color: white;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 600;
+      font-size: 1.15rem;
+      cursor: pointer;
+      font-family: 'Playfair Display', Georgia, serif;
+      letter-spacing: -0.01em;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg {
+      width: 36px; height: 36px;
+      display: block;
+      filter: drop-shadow(0 2px 6px rgba(34,197,94,0.25));
+    }
+    .nav { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+    .nav a, .nav button {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.18);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .nav a:hover, .nav button:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.35);
+      color: white;
+    }
+    .btn-register {
+      background: rgba(255,255,255,0.12) !important;
+      color: white !important;
+      font-weight: 600 !important;
+      border: 1px solid rgba(255,255,255,0.25) !important;
+      border-radius: 999px !important;
+      padding: 0.45rem 1.1rem !important;
+      text-transform: none !important;
+      letter-spacing: 0.02em !important;
+    }
+    .live-badge {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.8rem; font-weight: 500;
+      color: rgba(255,255,255,0.9); margin-left: 0.35rem;
+      padding: 0.4rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(34,197,94,0.35);
+      background: rgba(34,197,94,0.08);
+    }
+    .live-dot {
+      width: 8px; height: 8px; background: var(--green);
+      border-radius: 50%; animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ========== LANDING ========== */
+    .ticker {
+      background: var(--navy-light);
+      color: rgba(255,255,255,0.85);
+      padding: 0.5rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 0.8rem;
+    }
+    .ticker-track {
+      display: inline-flex; gap: 2.5rem;
+      animation: scroll 40s linear infinite;
+    }
+    @keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .ticker-item { display: inline-flex; gap: 0.4rem; align-items: center; }
+    .ticker-item .up { color: #22c55e; }
+    .ticker-item .down { color: #ef4444; }
+    .ticker-item .stable { color: #94a3b8; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 580px;
+      background: linear-gradient(135deg, #f5f0e8 0%, #ebe4d8 100%);
+    }
+    .hero-left {
+      padding: 3.5rem 2.5rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .hero-label {
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #8b7355; font-weight: 600; margin-bottom: 0.9rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 3.6rem; font-weight: 600; line-height: 1.05;
+      color: var(--navy); margin-bottom: 1rem; letter-spacing: -0.03em;
+    }
+    .hero-sub { font-size: 1.2rem; color: #4a5568; margin-bottom: 1.2rem; }
+    .hero-desc { font-size: 0.95rem; color: var(--text-muted); max-width: 400px; margin-bottom: 1.8rem; }
+    .hero-btns { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--navy); color: white; border: none;
+      padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600;
+      font-size: 0.95rem; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center;
+    }
+    .btn-primary:hover { background: #152a40; }
+    .btn-secondary {
+      background: transparent; color: var(--navy);
+      border: 1.5px solid #c4b8a5; padding: 0.8rem 1.5rem;
+      border-radius: 8px; font-weight: 500; font-size: 0.95rem;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center;
+    }
+    .feature-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .pill {
+      background: rgba(255,255,255,0.7); border: 1px solid #e0d6c8;
+      padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.8rem; color: #5a5a5a;
+    }
+
+    .hero-right { padding: 2.5rem; display: flex; align-items: center; justify-content: center; }
+    .ledger-card {
+      background: var(--navy-card); border-radius: 16px; padding: 1.4rem;
+      width: 100%; max-width: 400px; color: white;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .ledger-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .live-tag {
+      background: rgba(34,197,94,0.15); color: #4ade80;
+      font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600;
+    }
+    .ledger-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .stat-box { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.65rem; text-align: center; }
+    .stat-label { font-size: 0.68rem; opacity: 0.6; margin-bottom: 0.2rem; }
+    .stat-value { font-size: 0.95rem; font-weight: 600; }
+    .stat-value.green { color: #4ade80; }
+    .pool-rows { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .pool-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.82rem; padding: 0.4rem 0.55rem;
+      background: rgba(255,255,255,0.03); border-radius: 6px;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 0.4rem; }
+    .dot.btc { background: #f7931a; } .dot.usdt { background: #26a17b; } .dot.fx { background: #627eea; }
+    .pool-pct { color: #4ade80; font-size: 0.78rem; margin-right: 0.5rem; }
+    .bottom-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .bottom-stat { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 0.6rem; }
+    .bottom-label { font-size: 0.68rem; opacity: 0.55; }
+    .bottom-value { font-size: 0.95rem; font-weight: 600; }
+
+    section { padding: 3.5rem 1.5rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8b7355; font-weight: 600; margin-bottom: 0.5rem; }
+    .section-title { font-family: 'Playfair Display', Georgia, serif; font-size: 2.1rem; font-weight: 600; color: var(--navy); margin-bottom: 0.6rem; }
+    .section-desc { color: var(--text-muted); max-width: 500px; margin-bottom: 2rem; }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .plan-card {
+      background: white; border: 1px solid #e0d6c8; border-radius: 12px;
+      padding: 1.3rem; transition: all 0.2s;
+    }
+    .plan-card:hover { border-color: var(--navy); box-shadow: 0 8px 25px rgba(11,28,44,0.08); transform: translateY(-2px); }
+    .plan-duration { font-size: 0.72rem; font-weight: 600; color: #8b7355; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .plan-name { font-size: 0.95rem; font-weight: 600; color: var(--navy); margin-bottom: 0.8rem; }
+    .plan-deposit { font-size: 0.78rem; color: var(--text-muted); }
+    .plan-amount { font-size: 1.4rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; }
+    .plan-target-label { font-size: 0.78rem; color: var(--text-muted); }
+    .plan-target { font-size: 1.15rem; font-weight: 600; color: #16a34a; margin-bottom: 1rem; }
+    .btn-plan {
+      width: 100%; background: var(--navy); color: white; border: none;
+      padding: 0.65rem; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer;
+    }
+    .btn-plan:hover { background: #152a40; }
+
+    .footer {
+      background: var(--navy); color: rgba(255,255,255,0.75);
+      padding: 2rem 1.5rem; font-size: 0.85rem;
+    }
+    .footer-bottom { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+
+    /* ========== AUTH PAGES ========== */
+    .auth-wrap {
+      min-height: calc(100vh - 60px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem 1rem;
+      background: linear-gradient(135deg, #f5f0e8 0%, #ebe4d8 100%);
+    }
+    .auth-card {
+      background: white; border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(11,28,44,0.12);
+      width: 100%; max-width: 420px; padding: 2.3rem 1.8rem;
+      border: 1px solid #e8e0d4;
+    }
+    .auth-label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8b7355; font-weight: 600; margin-bottom: 0.4rem; }
+    .auth-card h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.9rem; color: var(--navy); margin-bottom: 0.3rem; }
+    .auth-sub { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.6rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
+    .form-group input {
+      width: 100%; padding: 0.75rem 0.95rem; border: 1.5px solid #e0d6c8;
+      border-radius: 9px; font-size: 0.95rem; font-family: inherit; background: #fafaf8;
+    }
+    .form-group input:focus { outline: none; border-color: var(--navy); background: white; }
+    .btn-submit {
+      width: 100%; background: var(--navy); color: white; border: none;
+      padding: 0.85rem; border-radius: 9px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 0.4rem;
+    }
+    .btn-submit:hover { background: #152a40; }
+    .switch-text { text-align: center; font-size: 0.9rem; color: var(--text-muted); margin-top: 1.3rem; }
+    .switch-text a { color: var(--navy); font-weight: 600; cursor: pointer; text-decoration: none; }
+    .error-msg {
+      background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c;
+      padding: 0.65rem 0.9rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem; display: none;
+    }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+
+    /* ========== DASHBOARD ========== */
+    .dash-main { max-width: 1180px; margin: 0 auto; padding: 1.8rem 1.3rem 3rem; }
+    .user-label { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8b7355; font-weight: 600; margin-bottom: 0.35rem; }
+    .user-name { font-family: 'Playfair Display', Georgia, serif; font-size: 2.3rem; font-weight: 600; color: var(--navy); letter-spacing: -0.02em; }
+    .user-email { color: var(--text-muted); font-size: 0.92rem; margin-top: 0.25rem; }
+    .user-actions { display: flex; gap: 0.6rem; margin-top: 1rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.55rem 1.1rem; border-radius: 8px; font-weight: 600; font-size: 0.88rem;
+      cursor: pointer; border: none; font-family: inherit;
+    }
+    .btn-outline { background: white; border: 1.5px solid #d4c9b8; color: var(--navy); }
+    .btn-disabled { background: #d1d5db; color: #6b7280; cursor: not-allowed; }
+
+    .progress-wrap {
+      background: white; border: 1px solid #e8e0d4; border-radius: 12px;
+      padding: 1rem; margin: 1.5rem 0; overflow-x: auto;
+    }
+    .progress-steps { display: flex; gap: 0.35rem; min-width: 860px; }
+    .step {
+      flex: 1; text-align: center; padding: 0.6rem 0.3rem; border-radius: 8px;
+      font-size: 0.75rem; background: #f8f5f0; color: var(--text-muted);
+    }
+    .step.active { background: #e8f0fe; color: #1e40af; font-weight: 600; }
+    .step.completed { background: #dcfce7; color: #166534; font-weight: 600; cursor: pointer; }
+    .step { cursor: pointer; transition: all 0.2s; }
+    .step:hover { filter: brightness(0.97); }
+
+    /* Support Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(11,28,44,0.55);
+      z-index: 999; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: white; border-radius: 16px; padding: 2rem 1.8rem;
+      max-width: 380px; width: 100%; box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+      text-align: center; position: relative;
+    }
+    .modal-box h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.5rem; color: var(--navy); margin-bottom: 0.4rem;
+    }
+    .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.4rem; }
+    .support-contact {
+      background: #f8f5f0; border: 1px solid #e8e0d4; border-radius: 10px;
+      padding: 1rem; margin-bottom: 0.8rem; text-align: left;
+    }
+    .support-contact .label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.2rem; }
+    .support-contact .value { font-size: 1.15rem; font-weight: 700; color: var(--navy); }
+    .support-contact a { color: var(--navy); text-decoration: none; }
+    .modal-close {
+      position: absolute; top: 0.8rem; right: 1rem; background: none; border: none;
+      font-size: 1.4rem; cursor: pointer; color: #9ca3af;
+    }
+    .step-num { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.1rem; }
+
+    .cards-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.9rem; margin-bottom: 1.5rem; }
+    .card {
+      background: white; border: 1px solid #e8e0d4; border-radius: 12px;
+      padding: 1.1rem; position: relative; overflow: hidden;
+    }
+    .card::after { content:''; position: absolute; bottom:0; left:0; right:0; height:3px; }
+    .card.blue::after { background:#3b82f6; }
+    .card.amber::after { background:#f59e0b; }
+    .card.green::after { background:#22c55e; }
+    .card.purple::after { background:#a855f7; }
+    .card-label { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .card-value { font-size: 1.25rem; font-weight: 700; color: var(--navy); }
+    .card-value.pending { color: #7c3aed; }
+
+    .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.3rem; margin-bottom: 1.5rem; }
+    .panel { background: white; border: 1px solid #e8e0d4; border-radius: 12px; padding: 1.3rem; }
+    .panel-title { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.4rem; }
+    .panel-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5; }
+
+    .deposit-plan-info { display: flex; gap: 0.6rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .info-pill { background: #f8f5f0; border: 1px solid #e0d6c8; padding: 0.45rem 0.8rem; border-radius: 8px; font-size: 0.82rem; }
+    .info-pill strong { display: block; font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+
+    .address-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .address-row {
+      display: flex; align-items: center; gap: 0.7rem;
+      background: #f8f5f0; border: 1px solid #e8e0d4; border-radius: 10px; padding: 0.65rem 0.8rem;
+    }
+    .address-label { font-weight: 600; font-size: 0.82rem; min-width: 90px; color: var(--navy); }
+    .address-value { flex:1; font-family: ui-monospace, monospace; font-size: 0.78rem; color: #374151; word-break: break-all; }
+    .btn-copy {
+      background: #e8e0d4; border: none; padding: 0.35rem 0.7rem; border-radius: 6px;
+      font-size: 0.78rem; font-weight: 600; cursor: pointer; color: var(--navy); white-space: nowrap;
+    }
+    .btn-copy.copied { background: #dcfce7; color: #166534; }
+
+    .withdraw-box {
+      background: #f8f5f0; border: 1px solid #e8e0d4; border-radius: 10px;
+      padding: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .withdraw-amount { font-size: 1.3rem; font-weight: 700; color: #16a34a; }
+    .milestone-bar { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
+    .milestone-fill { height: 100%; width: 0%; background: linear-gradient(90deg,#22c55e,#16a34a); }
+    .status-banner {
+      background: #fef3c7; border: 1px solid #fde68a; color: #92400e;
+      padding: 0.65rem 0.9rem; border-radius: 8px; font-size: 0.88rem; margin-top: 0.9rem;
+    }
+
+    .member-flow { display: flex; flex-direction: column; gap: 0.5rem; max-height: 300px; overflow-y: auto; }
+    .member-item {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.55rem 0.7rem; background: #f8f5f0; border-radius: 8px; font-size: 0.82rem;
+    }
+    .member-avatar {
+      width: 30px; height: 30px; border-radius: 50%; background: #dbeafe; color: #1e40af;
+      display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.72rem; flex-shrink: 0;
+    }
+    .member-name { font-weight: 600; color: var(--navy); }
+    .member-action { font-size: 0.78rem; color: var(--text-muted); }
+    .member-time { font-size: 0.72rem; color: #9ca3af; margin-left: auto; white-space: nowrap; }
+    .member-amount.deposit { color: #16a34a; }
+    .member-amount.withdraw { color: #dc2626; }
+
+    .trade-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.5rem; margin-bottom: 0.9rem; }
+    .trade-stat { background: #f8f5f0; border-radius: 8px; padding: 0.6rem; text-align: center; }
+    .trade-stat-label { font-size: 0.68rem; color: var(--text-muted); }
+    .trade-stat-value { font-weight: 600; font-size: 0.9rem; }
+    .empty-trades {
+      text-align: center; padding: 1.5rem 1rem; color: var(--text-muted); font-size: 0.88rem;
+      background: #fafafa; border-radius: 8px; border: 1px dashed #e5e7eb;
+    }
+
+    .history-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .history-table th {
+      text-align: left; padding: 0.6rem 0.5rem; border-bottom: 1px solid #e8e0d4;
+      color: var(--text-muted); font-weight: 600; font-size: 0.72rem; text-transform: uppercase;
+    }
+    .history-table td { padding: 0.7rem 0.5rem; border-bottom: 1px solid #f3f0ea; }
+    .badge { display: inline-block; padding: 0.18rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600; }
+    .badge-pending { background: #f3e8ff; color: #7c3aed; }
+
+    .footer-bar {
+      background: var(--navy); color: rgba(255,255,255,0.75);
+      padding: 0.9rem 1.3rem; display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 0.8rem; font-size: 0.82rem;
+    }
+    .reserve-box {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 0.4rem 0.9rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .reserve-value { font-weight: 600; color: #4ade80; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.6rem; }
+      .cards-row { grid-template-columns: 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .nav { display: none; }
+      .trade-stats { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .cards-row { grid-template-columns: 1fr; }
+      .row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== LANDING PAGE ==================== -->
+  <div id="page-landing" class="page active">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlue" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1e4a6e"/>
+                <stop offset="100%" stop-color="#0b1c2c"/>
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlue)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+      <nav class="nav">
+        <a href="#plans" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Plans</a>
+        <button onclick="showPage('strategies')">Strategies</button>
+        <button onclick="showPage('feedback')">Feedback</button>
+        <button onclick="showPage('login')">Login</button>
+        <button class="btn-register" onclick="showPage('register')">Register</button>
+        <div class="live-badge" onclick="openSupport()" style="cursor:pointer;" title="Contact live support">
+          <span class="live-dot"></span> Live desk online
+        </div>
+      </nav>
+    </header>
+
+    <div class="ticker">
+      <div class="ticker-track" id="liveTicker">
+        <span class="ticker-item">XAU/USD (Gold) <span class="up">2,648.30 +0.64%</span></span>
+        <span class="ticker-item">EUR/USD <span class="up">1.0842 +0.31%</span></span>
+        <span class="ticker-item">GBP/USD <span class="down">1.3015 -0.12%</span></span>
+        <span class="ticker-item">USD/JPY <span class="up">149.82 +0.28%</span></span>
+        <span class="ticker-item">BTC/USD <span class="up">67,420 +2.18%</span></span>
+        <span class="ticker-item">ETH/USD <span class="up">3,512 +1.42%</span></span>
+        <span class="ticker-item">USDT Pool <span class="stable">Stable</span></span>
+        <span class="ticker-item">XAG/USD (Silver) <span class="up">31.45 +1.05%</span></span>
+        <span class="ticker-item">NAS100 <span class="up">19,842 +0.87%</span></span>
+        <span class="ticker-item">US30 <span class="up">42,150 +0.54%</span></span>
+        <span class="ticker-item">Liquidity <strong>High</strong></span>
+        <span class="ticker-item">Verification <strong>Live</strong></span>
+        <!-- duplicate for seamless loop -->
+        <span class="ticker-item">XAU/USD (Gold) <span class="up">2,648.30 +0.64%</span></span>
+        <span class="ticker-item">EUR/USD <span class="up">1.0842 +0.31%</span></span>
+        <span class="ticker-item">GBP/USD <span class="down">1.3015 -0.12%</span></span>
+        <span class="ticker-item">USD/JPY <span class="up">149.82 +0.28%</span></span>
+        <span class="ticker-item">BTC/USD <span class="up">67,420 +2.18%</span></span>
+        <span class="ticker-item">ETH/USD <span class="up">3,512 +1.42%</span></span>
+        <span class="ticker-item">USDT Pool <span class="stable">Stable</span></span>
+        <span class="ticker-item">XAG/USD (Silver) <span class="up">31.45 +1.05%</span></span>
+        <span class="ticker-item">NAS100 <span class="up">19,842 +0.87%</span></span>
+        <span class="ticker-item">US30 <span class="up">42,150 +0.54%</span></span>
+        <span class="ticker-item">Liquidity <strong>High</strong></span>
+        <span class="ticker-item">Verification <strong>Live</strong></span>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-left">
+        <div class="hero-label">🏛️ PRIVATE CAPITAL OPERATIONS · FOR STUDENTS & BUILDERS</div>
+        <h1>Invest Future</h1>
+        <p class="hero-sub">Your one-time opportunity to build real capital while you study.</p>
+        <p class="hero-desc">Thousands of university students are already using Invest Future. Clear plans, live tracking, and a path from first deposit to release — designed for people who refuse to wait until graduation to start winning.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('register')">Join Now – Limited Access →</button>
+          <button class="btn-secondary" onclick="showPage('login')">Login</button>
+        </div>
+        <div class="feature-pills">
+          <span class="pill">🎓 Built for students</span>
+          <span class="pill">💰 30% referral income</span>
+          <span class="pill">⚡ 24–48 hour cycles</span>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="ledger-card">
+          <div class="ledger-header">
+            <div style="font-size:0.88rem; opacity:0.9;">📊 Invest Future Ledger</div>
+            <span class="live-tag">LIVE</span>
+          </div>
+          <div class="ledger-stats">
+            <div class="stat-box"><div class="stat-label">Portfolio desk</div><div class="stat-value">IF-24</div></div>
+            <div class="stat-box"><div class="stat-label">Current cycle</div><div class="stat-value green">+18.7%</div></div>
+            <div class="stat-box"><div class="stat-label">Ledger status</div><div class="stat-value">Balanced</div></div>
+          </div>
+          <div class="pool-rows">
+            <div class="pool-row"><div><span class="dot btc"></span>BTC Pool</div><div><span class="pool-pct">+2.41%</span>$42.1M</div></div>
+            <div class="pool-row"><div><span class="dot usdt"></span>USDT Desk</div><div><span class="pool-pct">+1.88%</span>$31.4M</div></div>
+            <div class="pool-row"><div><span class="dot fx"></span>FX Alpha</div><div><span class="pool-pct">+3.12%</span>$22.8M</div></div>
+          </div>
+          <div class="bottom-stats">
+            <div class="bottom-stat"><div class="bottom-label">On-chain Pool</div><div class="bottom-value">$96.5M</div></div>
+            <div class="bottom-stat"><div class="bottom-label">Active Plans</div><div class="bottom-value">7</div></div>
+            <div class="bottom-stat"><div class="bottom-label">Avg Duration</div><div class="bottom-value">24–48h</div></div>
+            <div class="bottom-stat"><div class="bottom-label">Oversight</div><div class="bottom-value">End to End</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="plans" style="background:white;">
+      <div class="container">
+        <div class="section-label">INVESTMENT PLANS</div>
+        <h2 class="section-title">Clear deposits. Live account figures.</h2>
+        <p class="section-desc">Select a plan to see the deposit, live target and duration.</p>
+        <div class="plans-grid">
+          <div class="plan-card">
+            <div class="plan-duration">24 Hours</div>
+            <div class="plan-name">Starter Growth Plan</div>
+            <div class="plan-deposit">Deposit</div>
+            <div class="plan-amount">$50.00</div>
+            <div class="plan-target-label">Live Target</div>
+            <div class="plan-target">$315.00</div>
+            <button class="btn-plan" onclick="selectPlan(50,315,'24 Hours','Starter Growth Plan')">Select Plan</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-duration">24 Hours</div>
+            <div class="plan-name">Core Investment Plan</div>
+            <div class="plan-deposit">Deposit</div>
+            <div class="plan-amount">$100.00</div>
+            <div class="plan-target-label">Live Target</div>
+            <div class="plan-target">$630.00</div>
+            <button class="btn-plan" onclick="selectPlan(100,630,'24 Hours','Core Investment Plan')">Select Plan</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-duration">24 Hours</div>
+            <div class="plan-name">Accelerated Plan</div>
+            <div class="plan-deposit">Deposit</div>
+            <div class="plan-amount">$150.00</div>
+            <div class="plan-target-label">Live Target</div>
+            <div class="plan-target">$945.00</div>
+            <button class="btn-plan" onclick="selectPlan(150,945,'24 Hours','Accelerated Plan')">Select Plan</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-duration">24 Hours</div>
+            <div class="plan-name">1-Day Growth Plan</div>
+            <div class="plan-deposit">Deposit</div>
+            <div class="plan-amount">$300.00</div>
+            <div class="plan-target-label">Live Target</div>
+            <div class="plan-target">$1,890.00</div>
+            <button class="btn-plan" onclick="selectPlan(300,1890,'24 Hours','1-Day Growth Plan')">Select Plan</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-duration">48 Hours</div>
+            <div class="plan-name">2-Day Momentum Plan</div>
+            <div class="plan-deposit">Deposit</div>
+            <div class="plan-amount">$500.00</div>
+            <div class="plan-target-label">Live Target</div>
+            <div class="plan-target">$5,000.00</div>
+            <button class="btn-plan" onclick="selectPlan(500,5000,'48 Hours','2-Day Momentum Plan')">Select Plan</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-duration">48 Hours</div>
+            <div class="plan-name">2-Day Expansion Plan</div>
+            <div class="plan-deposit">Deposit</div>
+            <div class="plan-amount">$1,000.00</div>
+            <div class="plan-target-label">Live Target</div>
+            <div class="plan-target">$10,000.00</div>
+            <button class="btn-plan" onclick="selectPlan(1000,10000,'48 Hours','2-Day Expansion Plan')">Select Plan</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-duration">48 Hours</div>
+            <div class="plan-name">2-Day Prestige Plan</div>
+            <div class="plan-deposit">Deposit</div>
+            <div class="plan-amount">$2,500.00</div>
+            <div class="plan-target-label">Live Target</div>
+            <div class="plan-target">$25,000.00</div>
+            <button class="btn-plan" onclick="selectPlan(2500,25000,'48 Hours','2-Day Prestige Plan')">Select Plan</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-duration">48 Hours</div>
+            <div class="plan-name">2-Day Elite Plan</div>
+            <div class="plan-deposit">Deposit</div>
+            <div class="plan-amount">$5,000.00</div>
+            <div class="plan-target-label">Live Target</div>
+            <div class="plan-target">$50,000.00</div>
+            <button class="btn-plan" onclick="selectPlan(5000,50000,'48 Hours','2-Day Elite Plan')">Select Plan</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Student Motivation -->
+    <section style="padding:3.5rem 1.5rem; background:linear-gradient(180deg,#f8f5f0 0%,#ebe4d8 100%);">
+      <div class="container" style="text-align:center;">
+        <div style="font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase; color:#8b7355; font-weight:600; margin-bottom:0.6rem;">ONE-TIME OPPORTUNITY</div>
+        <h2 style="font-family:'Playfair Display',Georgia,serif; font-size:clamp(1.8rem,4vw,2.4rem); color:var(--navy); margin-bottom:1rem; max-width:700px; margin-left:auto; margin-right:auto;">
+          Students: this is your moment. Don’t wait until graduation to start building real money.
+        </h2>
+        <p style="font-size:1.05rem; color:#4b5563; max-width:620px; margin:0 auto 1.8rem; line-height:1.65;">
+          Most of our members are university students who refused to stay broke while studying. They started with as little as <strong>$50</strong>, followed the clear stages, and used the 30% referral income to grow even faster. This window will not stay open forever — seats on the private desk are limited.
+        </p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; max-width:800px; margin:0 auto 2rem; text-align:left;">
+          <div style="background:white; border-radius:12px; padding:1.2rem; border:1px solid #e0d6c8;">
+            <div style="font-size:1.5rem; margin-bottom:0.4rem;">🎓</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.25rem;">For students</div>
+            <div style="font-size:0.88rem; color:#6b7280;">Start small, learn the system, grow while you study.</div>
+          </div>
+          <div style="background:white; border-radius:12px; padding:1.2rem; border:1px solid #e0d6c8;">
+            <div style="font-size:1.5rem; margin-bottom:0.4rem;">⚡</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.25rem;">Fast cycles</div>
+            <div style="font-size:0.88rem; color:#6b7280;">24–48 hour plans. See results, then scale.</div>
+          </div>
+          <div style="background:white; border-radius:12px; padding:1.2rem; border:1px solid #e0d6c8;">
+            <div style="font-size:1.5rem; margin-bottom:0.4rem;">💰</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.25rem;">30% referrals</div>
+            <div style="font-size:0.88rem; color:#6b7280;">Invite friends. Earn when they deposit. Paid in crypto.</div>
+          </div>
+        </div>
+        <button class="btn-primary" style="font-size:1.05rem; padding:0.95rem 2rem;" onclick="showPage('register')">Claim Your Spot Now →</button>
+        <p style="margin-top:1rem; font-size:0.85rem; color:#8b7355;">Limited access · One-time opportunity · Join while seats remain</p>
+      </div>
+    </section>
+
+    <footer class="footer" style="padding:2.5rem 1.5rem;">
+      <div style="max-width:1100px; margin:0 auto; text-align:center;">
+        <div style="font-size:1.35rem; font-weight:600; color:white; margin-bottom:0.5rem;">This is a one-time opportunity. Don’t miss it.</div>
+        <div style="font-size:0.95rem; opacity:0.85; margin-bottom:1.2rem; max-width:540px; margin-left:auto; margin-right:auto;">
+          University students across the platform are already building. Register now, choose a plan, and start with clear live tracking — before access closes.
+        </div>
+        <button class="btn-primary" style="display:inline-block; margin-bottom:1.8rem; background:#f5f0e8; color:var(--navy);" onclick="showPage('register')">Create Account →</button>
+        <div style="display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; font-size:0.9rem; margin-bottom:1.5rem;">
+          <a href="tel:+19202471179" style="color:#4ade80; text-decoration:none;">📞 +1 (920) 247-1179</a>
+          <a href="mailto:investfuture96@gmail.com" style="color:#4ade80; text-decoration:none;">✉️ investfuture96@gmail.com</a>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:1.2rem; font-size:0.82rem; opacity:0.65;">
+          © 2026 Invest Future. All rights reserved. · Digital assets involve risk.
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==================== STRATEGIES PAGE ==================== -->
+  <div id="page-strategies" class="page">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlue" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1e4a6e"/>
+                <stop offset="100%" stop-color="#0b1c2c"/>
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlue)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+      <nav class="nav">
+        <button onclick="showPage('landing')">Plans</button>
+        <button class="btn-register" style="background:rgba(255,255,255,0.15)!important;color:white!important;">Strategies</button>
+        <button onclick="showPage('feedback')">Feedback</button>
+        <button onclick="showPage('login')">Login</button>
+        <div class="live-badge" onclick="openSupport()" style="cursor:pointer;">
+          <span class="live-dot"></span> Live desk online
+        </div>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section style="background:linear-gradient(135deg,#0b1c2c 0%,#1a3350 100%); color:white; padding:4rem 1.5rem 3.5rem; position:relative; overflow:hidden;">
+      <div class="container" style="position:relative; z-index:1;">
+        <div style="font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase; color:#c9a227; font-weight:600; margin-bottom:0.8rem;">📈 TRADING STRATEGY</div>
+        <h1 style="font-family:'Playfair Display',Georgia,serif; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:600; line-height:1.1; margin-bottom:1rem; max-width:640px;">
+          How Invest Future Structures Market Opportunity
+        </h1>
+        <p style="font-size:1.05rem; opacity:0.85; max-width:520px; margin-bottom:1.8rem; line-height:1.6;">
+          Invest Future is built around disciplined market selection, live balance tracking, staged verification, and risk-managed forex and crypto exposure.
+        </p>
+        <button class="btn-primary" style="background:#f5f0e8; color:var(--navy);" onclick="showPage('login')">Enter Member Dashboard</button>
+      </div>
+    </section>
+
+    <!-- Strategy pillars -->
+    <section style="padding:3rem 1.5rem; background:#f8f5f0;">
+      <div class="container">
+        <h2 style="font-family:'Playfair Display',Georgia,serif; font-size:1.8rem; color:var(--navy); margin-bottom:1.5rem; text-align:center;">Strategy pillars used across forex and crypto</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem;">
+          <div style="background:#e8f0fe; border-radius:12px; padding:1.3rem;">
+            <div style="font-weight:700; color:#1e40af; margin-bottom:0.4rem;">↗ Forex Session Mapping</div>
+            <div style="font-size:0.88rem; color:#374151;">Market activity is reviewed around London and New York overlap, where liquidity is typically deeper and spreads are more stable.</div>
+          </div>
+          <div style="background:#dcfce7; border-radius:12px; padding:1.3rem;">
+            <div style="font-weight:700; color:#166534; margin-bottom:0.4rem;">↗ Crypto Momentum Rotation</div>
+            <div style="font-size:0.88rem; color:#374151;">Crypto exposure is organized around momentum, volume expansion, and support/resistance reactions.</div>
+          </div>
+          <div style="background:#fef3c7; border-radius:12px; padding:1.3rem;">
+            <div style="font-weight:700; color:#92400e; margin-bottom:0.4rem;">↗ Liquidity Zones</div>
+            <div style="font-size:0.88rem; color:#374151;">Repeated price reaction areas are watched for entries, exits, and invalidation points.</div>
+          </div>
+          <div style="background:#f3e8ff; border-radius:12px; padding:1.3rem;">
+            <div style="font-weight:700; color:#6b21a8; margin-bottom:0.4rem;">↗ Balance Monitoring</div>
+            <div style="font-size:0.88rem; color:#374151;">Live account movement is tracked against the active plan cycle inside the dashboard.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 numbered strategy cards -->
+    <section style="padding:3rem 1.5rem; background:white;">
+      <div class="container">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem;">
+          <div style="background:#fce7f3; border-radius:12px; padding:1.4rem;">
+            <div style="font-size:1.4rem; font-weight:700; color:#9d174d; margin-bottom:0.4rem;">01</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.35rem;">Position Sizing</div>
+            <div style="font-size:0.88rem; color:#4b5563;">Exposure is kept proportional to pool capital and active market conditions.</div>
+          </div>
+          <div style="background:#fef3c7; border-radius:12px; padding:1.4rem;">
+            <div style="font-size:1.4rem; font-weight:700; color:#92400e; margin-bottom:0.4rem;">02</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.35rem;">Stop-Loss Discipline</div>
+            <div style="font-size:0.88rem; color:#4b5563;">Invalidation zones are defined before trade entry.</div>
+          </div>
+          <div style="background:#dcfce7; border-radius:12px; padding:1.4rem;">
+            <div style="font-size:1.4rem; font-weight:700; color:#166534; margin-bottom:0.4rem;">03</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.35rem;">Market Diversification</div>
+            <div style="font-size:0.88rem; color:#4b5563;">Forex and crypto opportunities are separated by structure, volatility, and timing.</div>
+          </div>
+          <div style="background:#fce7f3; border-radius:12px; padding:1.4rem;">
+            <div style="font-size:1.4rem; font-weight:700; color:#9d174d; margin-bottom:0.4rem;">04</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.35rem;">Event Awareness</div>
+            <div style="font-size:0.88rem; color:#4b5563;">High-impact economic releases and abnormal volatility are treated with extra caution.</div>
+          </div>
+          <div style="background:#fef3c7; border-radius:12px; padding:1.4rem;">
+            <div style="font-size:1.4rem; font-weight:700; color:#92400e; margin-bottom:0.4rem;">05</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.35rem;">Review Cycle</div>
+            <div style="font-size:0.88rem; color:#4b5563;">Performance is reviewed by cycle so entries, exits, and drawdown remain visible.</div>
+          </div>
+          <div style="background:#dcfce7; border-radius:12px; padding:1.4rem;">
+            <div style="font-size:1.4rem; font-weight:700; color:#166534; margin-bottom:0.4rem;">06</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.35rem;">Capital Preservation</div>
+            <div style="font-size:0.88rem; color:#4b5563;">Protecting principal exposure comes before aggressive growth.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Market note -->
+    <section style="padding:2rem 1.5rem 3.5rem; background:#f8f5f0;">
+      <div class="container">
+        <div style="background:var(--navy); color:white; border-radius:14px; padding:1.8rem 2rem; border-left:5px solid #c9a227;">
+          <div style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:#c9a227; font-weight:600; margin-bottom:0.5rem;">MARKET NOTE</div>
+          <h3 style="font-family:'Playfair Display',Georgia,serif; font-size:1.5rem; margin-bottom:0.5rem;">Trading involves market risk.</h3>
+          <p style="opacity:0.85; font-size:0.95rem; line-height:1.55; max-width:600px;">
+            Forex and crypto markets can move quickly. The dashboard is designed to present account activity clearly, while market conditions, volatility, liquidity, and timing can affect outcomes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" style="padding:1.5rem;">
+      <div style="max-width:1100px; margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-size:0.85rem;">
+        <div>© 2026 Invest Future</div>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="tel:+19202471179" style="color:#4ade80; text-decoration:none;">+1 (920) 247-1179</a>
+          <a href="mailto:investfuture96@gmail.com" style="color:#4ade80; text-decoration:none;">investfuture96@gmail.com</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==================== FEEDBACK PAGE ==================== -->
+  <div id="page-feedback" class="page">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlue" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1e4a6e"/>
+                <stop offset="100%" stop-color="#0b1c2c"/>
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlue)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+      <nav class="nav">
+        <button onclick="showPage('landing')">Plans</button>
+        <button onclick="showPage('strategies')">Strategies</button>
+        <button class="btn-register" style="background:rgba(255,255,255,0.15)!important;color:white!important;">Feedback</button>
+        <button onclick="showPage('login')">Login</button>
+        <div class="live-badge" onclick="openSupport()" style="cursor:pointer;">
+          <span class="live-dot"></span> Live desk online
+        </div>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section style="background:linear-gradient(rgba(11,28,44,0.75),rgba(11,28,44,0.85)), url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200') center/cover; color:white; padding:4.5rem 1.5rem 3.5rem;">
+      <div class="container">
+        <div style="font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase; color:#c9a227; font-weight:600; margin-bottom:0.8rem;">💬 MEMBER FEEDBACK</div>
+        <h1 style="font-family:'Playfair Display',Georgia,serif; font-size:clamp(2.2rem,5vw,3.3rem); font-weight:600; line-height:1.1; margin-bottom:1rem; max-width:580px;">
+          Sample Client Feedback From Completed Cycles
+        </h1>
+        <p style="font-size:1rem; opacity:0.85; max-width:480px; margin-bottom:1.5rem;">
+          Illustrative member feedback examples showing how users may describe the Invest Future experience across deposits, tracking, withdrawal confirmation, and disbursement.
+        </p>
+        <button class="btn-primary" style="background:#f5f0e8; color:var(--navy);" onclick="showPage('register')">Open Member Access</button>
+      </div>
+    </section>
+
+    <!-- University + Referral banner -->
+    <section style="padding:1.5rem; background:#f0fdf4; border-bottom:1px solid #bbf7d0;">
+      <div class="container" style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; justify-content:space-between;">
+        <div style="flex:1; min-width:260px;">
+          <div style="font-weight:700; color:#166534; font-size:1.05rem; margin-bottom:0.3rem;">🎓 University Students Welcome</div>
+          <div style="font-size:0.92rem; color:#15803d;">Most of our active members are university students currently building capital on this platform while studying.</div>
+        </div>
+        <div style="flex:1; min-width:260px; background:white; border:1px solid #bbf7d0; border-radius:12px; padding:1rem 1.2rem;">
+          <div style="font-weight:700; color:var(--navy); font-size:1.05rem; margin-bottom:0.3rem;">💰 30% Referral Income</div>
+          <div style="font-size:0.92rem; color:#374151;">Earn <strong style="color:#16a34a;">30% income</strong> on every plan your referral takes. Share your link with them, then <strong>inform the live agent</strong> so your referral bonus can be sent to you via crypto after the client has deposited.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feedback themes -->
+    <section style="padding:3rem 1.5rem; background:white;">
+      <div class="container">
+        <div style="text-align:center; margin-bottom:2rem;">
+          <div style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:#8b7355; font-weight:600; margin-bottom:0.4rem;">EXPERIENCE SIGNALS</div>
+          <h2 style="font-family:'Playfair Display',Georgia,serif; font-size:1.8rem; color:var(--navy);">Feedback themes centered on clarity, timing, and account visibility.</h2>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-bottom:2.5rem;">
+          <div style="background:#e8f0fe; border-radius:12px; padding:1.3rem;">
+            <div style="font-size:0.75rem; font-weight:600; color:#1e40af; margin-bottom:0.3rem;">COMMON THEME</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.3rem;">Clear Stages</div>
+            <div style="font-size:0.88rem; color:#4b5563;">Deposit to disbursement is easy to follow step by step.</div>
+          </div>
+          <div style="background:#dcfce7; border-radius:12px; padding:1.3rem;">
+            <div style="font-size:0.75rem; font-weight:600; color:#166534; margin-bottom:0.3rem;">DASHBOARD FOCUS</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.3rem;">Live Balance</div>
+            <div style="font-size:0.88rem; color:#4b5563;">Members value visible account movement in real time.</div>
+          </div>
+          <div style="background:#fef3c7; border-radius:12px; padding:1.3rem;">
+            <div style="font-size:0.75rem; font-weight:600; color:#92400e; margin-bottom:0.3rem;">PROCESS STYLE</div>
+            <div style="font-weight:700; color:var(--navy); margin-bottom:0.3rem;">Structured</div>
+            <div style="font-size:0.88rem; color:#4b5563;">Each action appears at the right time without confusion.</div>
+          </div>
+        </div>
+
+        <!-- Sample testimonials -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.2rem;">
+          <div style="background:#f8f5f0; border-radius:14px; padding:1.4rem; border-top:4px solid #3b82f6;">
+            <div style="display:flex; align-items:center; gap:0.7rem; margin-bottom:0.9rem;">
+              <div style="width:40px;height:40px;border-radius:50%;background:#dbeafe;color:#1e40af;display:flex;align-items:center;justify-content:center;font-weight:700;">AM</div>
+              <div>
+                <div style="font-weight:700; color:var(--navy);">Arielle M.</div>
+                <div style="font-size:0.78rem; color:#6b7280;">Toronto, Canada · University student</div>
+              </div>
+            </div>
+            <p style="font-size:0.9rem; color:#374151; line-height:1.55; margin-bottom:1rem;">
+              The dashboard made the whole cycle easy to follow. I could see the balance movement, the approval status, and the release status without needing to ask for updates every few minutes.
+            </p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <span style="background:white; border:1px solid #e0d6c8; border-radius:6px; padding:0.3rem 0.6rem; font-size:0.75rem;"><strong>Cycle</strong> $10,000 / 48-hour</span>
+              <span style="background:white; border:1px solid #e0d6c8; border-radius:6px; padding:0.3rem 0.6rem; font-size:0.75rem;"><strong>Release</strong> $98,150</span>
+            </div>
+          </div>
+
+          <div style="background:#f8f5f0; border-radius:14px; padding:1.4rem; border-top:4px solid #22c55e;">
+            <div style="display:flex; align-items:center; gap:0.7rem; margin-bottom:0.9rem;">
+              <div style="width:40px;height:40px;border-radius:50%;background:#dcfce7;color:#166534;display:flex;align-items:center;justify-content:center;font-weight:700;">MH</div>
+              <div>
+                <div style="font-weight:700; color:var(--navy);">Marcus H.</div>
+                <div style="font-size:0.78rem; color:#6b7280;">Dallas, United States · University student</div>
+              </div>
+            </div>
+            <p style="font-size:0.9rem; color:#374151; line-height:1.55; margin-bottom:1rem;">
+              What stood out was the structure. Deposit, approval, tracking, withdrawal, confirmation, release. It was simple enough to understand but still looked like a serious financial platform.
+            </p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <span style="background:white; border:1px solid #e0d6c8; border-radius:6px; padding:0.3rem 0.6rem; font-size:0.75rem;"><strong>Cycle</strong> $500 / 24-hour</span>
+              <span style="background:white; border:1px solid #e0d6c8; border-radius:6px; padding:0.3rem 0.6rem; font-size:0.75rem;"><strong>Release</strong> $4,875</span>
+            </div>
+          </div>
+
+          <div style="background:#f8f5f0; border-radius:14px; padding:1.4rem; border-top:4px solid #f59e0b;">
+            <div style="display:flex; align-items:center; gap:0.7rem; margin-bottom:0.9rem;">
+              <div style="width:40px;height:40px;border-radius:50%;background:#fef3c7;color:#92400e;display:flex;align-items:center;justify-content:center;font-weight:700;">SJ</div>
+              <div>
+                <div style="font-weight:700; color:var(--navy);">Samira J.</div>
+                <div style="font-size:0.78rem; color:#6b7280;">Dubai, UAE · University student</div>
+              </div>
+            </div>
+            <p style="font-size:0.9rem; color:#374151; line-height:1.55; margin-bottom:1rem;">
+              The live balance chart helped me stay calm during the cycle. There were small movements, but the overall tracking stayed clear and the final stage was easy to identify. I also earned from my referrals.
+            </p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <span style="background:white; border:1px solid #e0d6c8; border-radius:6px; padding:0.3rem 0.6rem; font-size:0.75rem;"><strong>Cycle</strong> $2,000 / 48-hour</span>
+              <span style="background:white; border:1px solid #e0d6c8; border-radius:6px; padding:0.3rem 0.6rem; font-size:0.75rem;"><strong>Release</strong> $19,780</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Referral CTA -->
+    <section style="padding:2.5rem 1.5rem; background:var(--navy); color:white; text-align:center;">
+      <div class="container">
+        <h2 style="font-family:'Playfair Display',Georgia,serif; font-size:1.7rem; margin-bottom:0.6rem;">Earn 30% on every referral</h2>
+        <p style="opacity:0.85; max-width:560px; margin:0 auto 1.3rem; font-size:0.95rem;">
+          When someone you invite selects any plan, you receive <strong style="color:#4ade80;">30% of their plan deposit</strong> as referral income. Share your link with them, then <strong>inform the live agent</strong> so the money can be sent to you via crypto after the client has deposited.
+        </p>
+        <button class="btn-primary" style="background:#f5f0e8; color:var(--navy);" onclick="showPage('register')">Create Account & Start Referring →</button>
+      </div>
+    </section>
+
+    <footer class="footer" style="padding:1.5rem;">
+      <div style="max-width:1100px; margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-size:0.85rem;">
+        <div>© 2026 Invest Future</div>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="tel:+19202471179" style="color:#4ade80; text-decoration:none;">+1 (920) 247-1179</a>
+          <a href="mailto:investfuture96@gmail.com" style="color:#4ade80; text-decoration:none;">investfuture96@gmail.com</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==================== LOGIN PAGE ==================== -->
+  <div id="page-login" class="page">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlue" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1e4a6e"/>
+                <stop offset="100%" stop-color="#0b1c2c"/>
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlue)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+      <nav class="nav">
+        <button onclick="showPage('register')">Create account</button>
+      </nav>
+    </header>
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="auth-label">Member Access</div>
+        <h1>Welcome back</h1>
+        <p class="auth-sub">Log in to your Invest Future dashboard</p>
+        <div class="error-msg" id="loginError">Invalid email or password.</div>
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Email address</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn-submit">Log in →</button>
+        </form>
+        <p class="switch-text">New member? <a onclick="showPage('register')">Create an account</a></p>
+        <p class="switch-text" style="margin-top:0.5rem;"><a onclick="showPage('admin-login')" style="font-size:0.8rem; color:#9ca3af;">Admin login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== REGISTER PAGE ==================== -->
+  <div id="page-register" class="page">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlue" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1e4a6e"/>
+                <stop offset="100%" stop-color="#0b1c2c"/>
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlue)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+      <nav class="nav">
+        <button onclick="showPage('login')">Already have an account?</button>
+      </nav>
+    </header>
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="auth-label">New Member</div>
+        <h1>Create account</h1>
+        <p class="auth-sub">Join Invest Future and open your private desk</p>
+        <div class="error-msg" id="regError">Please fill all fields correctly.</div>
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label>Full name</label>
+            <input type="text" id="regName" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label>Email address</label>
+            <input type="email" id="regEmail" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Nationality</label>
+            <select id="regNationality" required style="width:100%; padding:0.75rem 0.95rem; border:1.5px solid #e0d6c8; border-radius:9px; font-size:0.95rem; font-family:inherit; background:#fafaf8;">
+              <option value="">Select your nationality</option>
+              <option value="United States">United States</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Canada">Canada</option>
+              <option value="Australia">Australia</option>
+              <option value="Germany">Germany</option>
+              <option value="France">France</option>
+              <option value="Nigeria">Nigeria</option>
+              <option value="Ghana">Ghana</option>
+              <option value="Kenya">Kenya</option>
+              <option value="South Africa">South Africa</option>
+              <option value="India">India</option>
+              <option value="Pakistan">Pakistan</option>
+              <option value="Philippines">Philippines</option>
+              <option value="Indonesia">Indonesia</option>
+              <option value="Brazil">Brazil</option>
+              <option value="Mexico">Mexico</option>
+              <option value="United Arab Emirates">United Arab Emirates</option>
+              <option value="Saudi Arabia">Saudi Arabia</option>
+              <option value="Turkey">Turkey</option>
+              <option value="China">China</option>
+              <option value="Japan">Japan</option>
+              <option value="South Korea">South Korea</option>
+              <option value="Singapore">Singapore</option>
+              <option value="Malaysia">Malaysia</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="row-2">
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="regPassword" placeholder="Min. 6 characters" required minlength="6">
+            </div>
+            <div class="form-group">
+              <label>Confirm</label>
+              <input type="password" id="regConfirm" placeholder="Repeat password" required minlength="6">
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Create account →</button>
+        </form>
+        <p class="switch-text">Already registered? <a onclick="showPage('login')">Log in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PLAN DETAILS ==================== -->
+  <div id="page-plan-details" class="page">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlue" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1e4a6e"/>
+                <stop offset="100%" stop-color="#0b1c2c"/>
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlue)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+      <nav class="nav">
+        <button onclick="showPage('landing')">← Back to Plans</button>
+        <div class="live-badge" onclick="openSupport()" style="cursor:pointer;" title="Contact live support">
+          <span class="live-dot"></span> Live desk online
+        </div>
+      </nav>
+    </header>
+
+    <div class="auth-wrap" style="align-items:flex-start; padding-top:2.5rem;">
+      <div style="width:100%; max-width:520px;">
+
+        <!-- Profit breakdown card -->
+        <div class="auth-card" style="margin-bottom:1.2rem;" id="planProfitCard">
+          <div class="auth-label">PLAN DETAILS</div>
+          <h1 id="pdName" style="font-size:1.7rem; margin-bottom:0.3rem;">Starter Growth Plan</h1>
+          <p class="auth-sub" id="pdDuration">Duration: 24 Hours</p>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin:1.5rem 0;">
+            <div style="background:#f8f5f0; border-radius:10px; padding:1rem; text-align:center;">
+              <div style="font-size:0.75rem; color:#6b7280; margin-bottom:0.25rem;">YOUR DEPOSIT</div>
+              <div style="font-size:1.5rem; font-weight:700; color:var(--navy);" id="pdDeposit">$50.00</div>
+            </div>
+            <div style="background:#f0fdf4; border-radius:10px; padding:1rem; text-align:center;">
+              <div style="font-size:0.75rem; color:#6b7280; margin-bottom:0.25rem;">LIVE TARGET</div>
+              <div style="font-size:1.5rem; font-weight:700; color:#16a34a;" id="pdTarget">$315.00</div>
+            </div>
+          </div>
+
+          <div style="background:#f8f5f0; border-radius:12px; padding:1.2rem; margin-bottom:1.2rem;">
+            <div style="font-weight:600; color:var(--navy); margin-bottom:0.8rem; font-size:0.95rem;">Profit Breakdown</div>
+            <div style="display:flex; justify-content:space-between; padding:0.45rem 0; border-bottom:1px solid #e8e0d4; font-size:0.9rem;">
+              <span style="color:#6b7280;">Deposit amount</span>
+              <span id="pdRowDeposit" style="font-weight:600;">$50.00</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:0.45rem 0; border-bottom:1px solid #e8e0d4; font-size:0.9rem;">
+              <span style="color:#6b7280;">Expected profit</span>
+              <span id="pdProfit" style="font-weight:600; color:#16a34a;">+$265.00</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:0.45rem 0; border-bottom:1px solid #e8e0d4; font-size:0.9rem;">
+              <span style="color:#6b7280;">Total return (Live Target)</span>
+              <span id="pdRowTarget" style="font-weight:600; color:#16a34a;">$315.00</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:0.45rem 0; border-bottom:1px solid #e8e0d4; font-size:0.9rem;">
+              <span style="color:#6b7280;">Profit multiple</span>
+              <span id="pdMultiple" style="font-weight:600;">6.3×</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:0.45rem 0; font-size:0.9rem;">
+              <span style="color:#6b7280;">Duration</span>
+              <span id="pdRowDuration" style="font-weight:600;">24 Hours</span>
+            </div>
+          </div>
+
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:0.9rem 1rem; font-size:0.85rem; color:#1e40af; margin-bottom:1.3rem;">
+            After you confirm this plan you will receive the USDT (TRC-20) payment address to complete your deposit.
+          </div>
+
+          <button class="btn-submit" onclick="confirmPlanAndShowPayment()">Confirm Plan & Continue to Payment →</button>
+          <p class="switch-text" style="margin-top:1rem;">
+            <a onclick="showPage('landing')">← Choose a different plan</a>
+          </p>
+        </div>
+
+        <!-- Payment method card (hidden until confirmed) -->
+        <div class="auth-card" id="planPaymentCard" style="display:none;">
+          <div class="auth-label">PAYMENT METHOD</div>
+          <h1 style="font-size:1.5rem; margin-bottom:0.3rem;">Send USDT (TRC-20)</h1>
+          <p class="auth-sub">Complete your deposit using the address below</p>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.7rem; margin-bottom:1.2rem;">
+            <div style="background:#f8f5f0; border-radius:10px; padding:0.9rem; text-align:center;">
+              <div style="font-size:0.72rem; color:#6b7280;">AMOUNT TO SEND</div>
+              <div style="font-size:1.3rem; font-weight:700; color:var(--navy);" id="payAmount">$50.00</div>
+            </div>
+            <div style="background:#f0fdf4; border-radius:10px; padding:0.9rem; text-align:center;">
+              <div style="font-size:0.72rem; color:#6b7280;">YOU WILL RECEIVE</div>
+              <div style="font-size:1.3rem; font-weight:700; color:#16a34a;" id="payTarget">$315.00</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:0.6rem; font-weight:600; font-size:0.9rem; color:var(--navy);">
+            Send exactly the amount above to:
+          </div>
+          <div class="address-row" style="margin-bottom:1rem;">
+            <div class="address-label">USDT TRC-20</div>
+            <div class="address-value" id="payAddr">TJJJnCmM1pNhYbWoeim7sCnv3ye2SCT2eE</div>
+            <button class="btn-copy" onclick="copyAddr('payAddr', this)">Copy</button>
+          </div>
+
+          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1.2rem;">
+            Only send USDT on the TRC-20 network. After sending, click the button below to confirm.
+          </p>
+
+          <button class="btn-submit" onclick="afterPaymentConfirm()">I have sent the USDT – Go to Dashboard →</button>
+          <p class="switch-text" style="margin-top:1rem;">
+            <a onclick="document.getElementById('planPaymentCard').style.display='none'; document.getElementById('planProfitCard').style.display='block';">← Back to plan details</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DASHBOARD ==================== -->
+  <div id="page-dashboard" class="page">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlue" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1e4a6e"/>
+                <stop offset="100%" stop-color="#0b1c2c"/>
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlue)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+      <nav class="nav">
+        <button onclick="showPage('landing')">Plans</button>
+        <button onclick="showPage('strategies')">Strategies</button>
+        <button onclick="showPage('feedback')">Feedback</button>
+        <button class="btn-register" style="background:rgba(255,255,255,0.15)!important;color:white!important;">Dashboard</button>
+        <button onclick="logout()">Logout</button>
+        <div class="live-badge" onclick="openSupport()" style="cursor:pointer;" title="Contact live support">
+          <span class="live-dot"></span> Live desk online
+        </div>
+      </nav>
+    </header>
+
+    <div class="ticker">
+      <div class="ticker-track">
+        <span class="ticker-item">XAU/USD (Gold) <span class="up">2,648.30 +0.64%</span></span>
+        <span class="ticker-item">EUR/USD <span class="up">1.0842 +0.31%</span></span>
+        <span class="ticker-item">GBP/USD <span class="down">1.3015 -0.12%</span></span>
+        <span class="ticker-item">USD/JPY <span class="up">149.82 +0.28%</span></span>
+        <span class="ticker-item">BTC/USD <span class="up">67,420 +2.18%</span></span>
+        <span class="ticker-item">ETH/USD <span class="up">3,512 +1.42%</span></span>
+        <span class="ticker-item">XAG/USD (Silver) <span class="up">31.45 +1.05%</span></span>
+        <span class="ticker-item">NAS100 <span class="up">19,842 +0.87%</span></span>
+        <span class="ticker-item">US30 <span class="up">42,150 +0.54%</span></span>
+        <span class="ticker-item">Liquidity <strong>High</strong></span>
+        <span class="ticker-item">XAU/USD (Gold) <span class="up">2,648.30 +0.64%</span></span>
+        <span class="ticker-item">EUR/USD <span class="up">1.0842 +0.31%</span></span>
+        <span class="ticker-item">GBP/USD <span class="down">1.3015 -0.12%</span></span>
+        <span class="ticker-item">USD/JPY <span class="up">149.82 +0.28%</span></span>
+        <span class="ticker-item">BTC/USD <span class="up">67,420 +2.18%</span></span>
+        <span class="ticker-item">ETH/USD <span class="up">3,512 +1.42%</span></span>
+        <span class="ticker-item">XAG/USD (Silver) <span class="up">31.45 +1.05%</span></span>
+        <span class="ticker-item">NAS100 <span class="up">19,842 +0.87%</span></span>
+        <span class="ticker-item">US30 <span class="up">42,150 +0.54%</span></span>
+        <span class="ticker-item">Liquidity <strong>High</strong></span>
+      </div>
+    </div>
+
+    <div class="dash-main">
+      <div class="user-label">👤 USER DASHBOARD</div>
+      <h1 class="user-name" id="userName">Member Account</h1>
+      <div class="user-email" id="userEmail">member@investfuture.demo</div>
+      <div class="user-email" id="userNationality" style="font-size:0.85rem; margin-top:0.15rem;"></div>
+      <div class="user-actions">
+        <button class="btn btn-outline" onclick="document.getElementById('deposit-section').scrollIntoView({behavior:'smooth'})">Make Deposit</button>
+        <button class="btn btn-disabled" id="btnWithdrawTop" disabled>Withdraw</button>
+      </div>
+
+      <!-- Choose Plan (all plans available) -->
+      <div class="panel" style="margin-bottom:1.5rem;">
+        <div class="panel-title">📋 Choose Your Plan</div>
+        <p class="panel-desc">Select any plan below. Your deposit amount and target will update automatically.</p>
+        <div class="plans-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+          <div class="plan-card" style="padding:1rem;">
+            <div class="plan-duration">24 Hours</div>
+            <div class="plan-name" style="font-size:0.9rem;">Starter Growth</div>
+            <div class="plan-amount" style="font-size:1.2rem;">$50</div>
+            <div class="plan-target" style="font-size:1rem; margin-bottom:0.7rem;">→ $315</div>
+            <button class="btn-plan" onclick="selectPlan(50,315,'24 Hours','Starter Growth Plan')">Select</button>
+          </div>
+          <div class="plan-card" style="padding:1rem;">
+            <div class="plan-duration">24 Hours</div>
+            <div class="plan-name" style="font-size:0.9rem;">Core Investment</div>
+            <div class="plan-amount" style="font-size:1.2rem;">$100</div>
+            <div class="plan-target" style="font-size:1rem; margin-bottom:0.7rem;">→ $630</div>
+            <button class="btn-plan" onclick="selectPlan(100,630,'24 Hours','Core Investment Plan')">Select</button>
+          </div>
+          <div class="plan-card" style="padding:1rem;">
+            <div class="plan-duration">24 Hours</div>
+            <div class="plan-name" style="font-size:0.9rem;">Accelerated</div>
+            <div class="plan-amount" style="font-size:1.2rem;">$150</div>
+            <div class="plan-target" style="font-size:1rem; margin-bottom:0.7rem;">→ $945</div>
+            <button class="btn-plan" onclick="selectPlan(150,945,'24 Hours','Accelerated Plan')">Select</button>
+          </div>
+          <div class="plan-card" style="padding:1rem;">
+            <div class="plan-duration">24 Hours</div>
+            <div class="plan-name" style="font-size:0.9rem;">1-Day Growth</div>
+            <div class="plan-amount" style="font-size:1.2rem;">$300</div>
+            <div class="plan-target" style="font-size:1rem; margin-bottom:0.7rem;">→ $1,890</div>
+            <button class="btn-plan" onclick="selectPlan(300,1890,'24 Hours','1-Day Growth Plan')">Select</button>
+          </div>
+          <div class="plan-card" style="padding:1rem;">
+            <div class="plan-duration">48 Hours</div>
+            <div class="plan-name" style="font-size:0.9rem;">2-Day Momentum</div>
+            <div class="plan-amount" style="font-size:1.2rem;">$500</div>
+            <div class="plan-target" style="font-size:1rem; margin-bottom:0.7rem;">→ $5,000</div>
+            <button class="btn-plan" onclick="selectPlan(500,5000,'48 Hours','2-Day Momentum Plan')">Select</button>
+          </div>
+          <div class="plan-card" style="padding:1rem;">
+            <div class="plan-duration">48 Hours</div>
+            <div class="plan-name" style="font-size:0.9rem;">2-Day Expansion</div>
+            <div class="plan-amount" style="font-size:1.2rem;">$1,000</div>
+            <div class="plan-target" style="font-size:1rem; margin-bottom:0.7rem;">→ $10,000</div>
+            <button class="btn-plan" onclick="selectPlan(1000,10000,'48 Hours','2-Day Expansion Plan')">Select</button>
+          </div>
+          <div class="plan-card" style="padding:1rem;">
+            <div class="plan-duration">48 Hours</div>
+            <div class="plan-name" style="font-size:0.9rem;">2-Day Prestige</div>
+            <div class="plan-amount" style="font-size:1.2rem;">$2,500</div>
+            <div class="plan-target" style="font-size:1rem; margin-bottom:0.7rem;">→ $25,000</div>
+            <button class="btn-plan" onclick="selectPlan(2500,25000,'48 Hours','2-Day Prestige Plan')">Select</button>
+          </div>
+          <div class="plan-card" style="padding:1rem;">
+            <div class="plan-duration">48 Hours</div>
+            <div class="plan-name" style="font-size:0.9rem;">2-Day Elite</div>
+            <div class="plan-amount" style="font-size:1.2rem;">$5,000</div>
+            <div class="plan-target" style="font-size:1rem; margin-bottom:0.7rem;">→ $50,000</div>
+            <button class="btn-plan" onclick="selectPlan(5000,50000,'48 Hours','2-Day Elite Plan')">Select</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-wrap">
+        <div class="progress-steps" id="progressSteps">
+          <div class="step active" data-stage="1" onclick="setStage(1)"><span class="step-num">1</span>Deposit</div>
+          <div class="step" data-stage="2" onclick="setStage(2)"><span class="step-num">2</span>Approval</div>
+          <div class="step" data-stage="3" onclick="setStage(3)"><span class="step-num">3</span>Tracking</div>
+          <div class="step" data-stage="4" onclick="setStage(4)"><span class="step-num">4</span>Tax Fee</div>
+          <div class="step" data-stage="5" onclick="setStage(5)"><span class="step-num">5</span>Tax Clearance</div>
+          <div class="step" data-stage="6" onclick="setStage(6)"><span class="step-num">6</span>Withdrawal Fee</div>
+          <div class="step" data-stage="7" onclick="setStage(7)"><span class="step-num">7</span>Fee Clearance</div>
+          <div class="step" data-stage="8" onclick="setStage(8)"><span class="step-num">8</span>Disbursement</div>
+          <div class="step" data-stage="9" onclick="setStage(9)"><span class="step-num">9</span>Complete</div>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="cards-row">
+        <div class="card blue">
+          <div class="card-label">📋 Plan selected</div>
+          <div class="card-value" id="dashPlanName" style="font-size:1.05rem;">Starter Growth Plan</div>
+        </div>
+        <div class="card amber">
+          <div class="card-label">💰 Amount deposited</div>
+          <div class="card-value" id="dashDeposit">$50.00</div>
+        </div>
+        <div class="card green">
+          <div class="card-label">📈 Current balance</div>
+          <div class="card-value" id="dashBalance">$0.00</div>
+        </div>
+        <div class="card purple">
+          <div class="card-label">🛡️ Plan status</div>
+          <div class="card-value pending">Pending</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Deposit -->
+        <div class="panel" id="deposit-section">
+          <div class="panel-title">📥 MAKE DEPOSIT</div>
+          <p class="panel-desc">Select your plan, send payment, then confirm. Use one of the addresses below. After sending, click confirm.</p>
+          <div class="deposit-plan-info">
+            <div class="info-pill"><strong>DEPOSIT</strong><span id="infoDeposit">$50.00</span></div>
+            <div class="info-pill"><strong>LIVE TARGET</strong><span id="infoTarget">$315.00</span></div>
+            <div class="info-pill"><strong>DURATION</strong><span id="infoDuration">24 Hours</span></div>
+          </div>
+          <div style="margin-bottom:0.7rem; font-weight:600; font-size:0.88rem; color:var(--navy);">
+            Send Deposit To &nbsp; <span style="color:#16a34a;" id="infoRequired">$50.00 required</span>
+          </div>
+          <div class="address-list">
+            <div class="address-row">
+              <div class="address-label">USDT TRC-20</div>
+              <div class="address-value" id="addr-usdt">TJJJnCmM1pNhYbWoeim7sCnv3ye2SCT2eE</div>
+              <button class="btn-copy" onclick="copyAddr('addr-usdt', this)">Copy</button>
+            </div>
+          </div>
+          <p style="margin-top:0.8rem; font-size:0.78rem; color:var(--text-muted);">
+            Only USDT (TRC-20) is accepted. Send the exact amount to the address above.
+          </p>
+          <div style="margin-top:1rem; background:#fef3c7; border:1px solid #fde68a; border-radius:10px; padding:1rem 1.1rem;">
+            <div style="font-weight:700; color:#92400e; margin-bottom:0.45rem; font-size:0.9rem;">⚠️ Having trouble making your deposit?</div>
+            <p style="font-size:0.85rem; color:#78350f; line-height:1.55; margin:0;">
+              If you experience any difficulty while attempting to deposit — whether the transfer fails, the network is slow, the amount does not reflect, you are unsure which network to use, or you encounter any other issue during the payment process — please do not wait or try repeatedly without guidance. Contact our live help line immediately on WhatsApp so a desk officer can assist you step by step and confirm your transaction safely. Message us right away at
+              <a href="https://wa.me/19202471179" target="_blank" style="color:#166534; font-weight:700; text-decoration:underline;">+1 (920) 247-1179</a>
+              and we will respond as quickly as possible to help you complete your deposit without delay.
+            </p>
+          </div>
+          <button class="btn-primary" style="width:100%; margin-top:1rem;" onclick="clientClaimDeposit()">
+            I have sent the USDT – Notify Admin
+          </button>
+          <p id="depositClaimNote" style="margin-top:0.7rem; font-size:0.82rem; color:#6b7280; text-align:center;"></p>
+        </div>
+
+        <!-- Live Member Flow -->
+        <div class="panel">
+          <div class="panel-title">
+            Live Member Flow
+            <span style="font-size:0.72rem; font-weight:500; color:#16a34a; margin-left:auto;">6+ actions/hr</span>
+          </div>
+          <div class="member-flow" id="member-flow"></div>
+        </div>
+      </div>
+
+      <!-- Withdrawal -->
+      <div class="panel" style="margin-bottom:1.5rem;">
+        <div class="panel-title">🏧 WITHDRAWAL</div>
+        <p class="panel-desc">Withdrawal opens when tracking is complete. Your live account balance is still tracking.</p>
+        <div class="withdraw-box">
+          <div>
+            <div style="font-size:0.82rem; color:var(--text-muted);">AVAILABLE BALANCE</div>
+            <div class="withdraw-amount" id="withdrawBalance">$0.00</div>
+          </div>
+          <button class="btn btn-disabled" id="btnWithdrawMain" disabled>Withdraw Funds</button>
+        </div>
+        <div style="margin-top:1rem;">
+          <div style="display:flex; justify-content:space-between; font-size:0.88rem; font-weight:600; color:var(--navy);">
+            <span>Milestone Growth Tracker</span><span>0%</span>
+          </div>
+          <div class="milestone-bar"><div class="milestone-fill"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted);">
+            <span id="msStart">$50.00</span><span id="msCurrent">$50.00</span><span id="msTarget">$315.00</span>
+          </div>
+        </div>
+        <div class="status-banner" id="statusBanner">Awaiting system verification…</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-title">Recorded Trade Performance <span style="margin-left:auto; font-size:0.78rem; color:#16a34a;">+$0.00</span></div>
+          <div class="trade-stats">
+            <div class="trade-stat"><div class="trade-stat-label">DEPOSIT</div><div class="trade-stat-value" id="tradeDeposit">$50.00</div></div>
+            <div class="trade-stat"><div class="trade-stat-label">CURRENT</div><div class="trade-stat-value" id="tradeCurrent">$50.00</div></div>
+            <div class="trade-stat"><div class="trade-stat-label">CLOSED</div><div class="trade-stat-value">0</div></div>
+            <div class="trade-stat"><div class="trade-stat-label">OPEN</div><div class="trade-stat-value">0</div></div>
+          </div>
+          <div class="empty-trades">Recorded trades will appear here after an operator logs an execution.</div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Gold Trade Ledger <span class="badge" style="background:#dcfce7;color:#166534;margin-left:auto;">LIVE</span></div>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.8rem;">Recorded executions and P&L for this investment.</p>
+          <div class="empty-trades">No records yet.<br><span style="font-size:0.78rem;">Market source: Twelve Data</span></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:1.3rem;">
+        <div class="panel-title">Transaction History</div>
+        <table class="history-table">
+          <thead>
+            <tr><th>Date</th><th>Plan</th><th>Deposit</th><th>Live Target</th><th>Status</th><th>Stage</th></tr>
+          </thead>
+          <tbody id="historyBody">
+            <tr id="historyEmptyRow">
+              <td colspan="6" style="text-align:center; color:#9ca3af; padding:1.2rem;">
+                No transactions yet. Deposit $0.00 until you complete a deposit.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer-bar" style="flex-direction:column; align-items:stretch; gap:1.2rem; padding:1.8rem 1.5rem;">
+      <div style="text-align:center; max-width:700px; margin:0 auto;">
+        <div style="font-size:1.15rem; font-weight:600; color:white; margin-bottom:0.4rem;">Ready to grow with Invest Future?</div>
+        <div style="font-size:0.9rem; opacity:0.8; margin-bottom:1rem;">
+          Join members already using our private desk. Register now, choose a plan, and start with clear live tracking.
+        </div>
+        <button class="btn-primary" style="display:inline-block;" onclick="showPage('register')">Create Account →</button>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; border-top:1px solid rgba(255,255,255,0.1); padding-top:1.2rem;">
+        <div>
+          <strong style="color:white;">Invest Future</strong> · Private capital operations
+        </div>
+        <div style="display:flex; gap:1.5rem; flex-wrap:wrap; font-size:0.85rem;">
+          <a href="tel:+19202471179" style="color:#4ade80; text-decoration:none;">📞 +1 (920) 247-1179</a>
+          <a href="mailto:investfuture96@gmail.com" style="color:#4ade80; text-decoration:none;">✉️ investfuture96@gmail.com</a>
+        </div>
+        <div class="reserve-box">
+          <span>📡 Reserve Monitor</span>
+          <span class="reserve-value">$96,501,000.00</span>
+          <span style="font-size:0.72rem; opacity:0.7;">USDT · LIVE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN LOGIN ==================== -->
+  <div id="page-admin-login" class="page">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlueAdmin1" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#1e4a6e"/><stop offset="100%" stop-color="#0b1c2c"/></linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlueAdmin1)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+    </header>
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="auth-label">ADMIN ACCESS</div>
+        <h1>Admin Login</h1>
+        <p class="auth-sub">Manage members, deposits and stages</p>
+        <div class="error-msg" id="adminLoginError">Invalid credentials.</div>
+        <form onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label>Admin email</label>
+            <input type="email" id="adminEmail" placeholder="admin@investfuture.com" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="adminPassword" placeholder="Admin password" required>
+          </div>
+          <button type="submit" class="btn-submit">Enter Admin Panel →</button>
+        </form>
+        <p class="switch-text"><a onclick="showPage('landing')">← Back to site</a></p>
+        <p style="margin-top:1rem; font-size:0.78rem; color:#9ca3af; text-align:center;">
+          Default: admin@investfuture.com / Admin123!
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN DASHBOARD ==================== -->
+  <div id="page-admin" class="page">
+    <header class="header">
+      <div class="logo" onclick="showPage('landing')">
+        <div class="logo-icon">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crBlueAdmin2" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#1e4a6e"/><stop offset="100%" stop-color="#0b1c2c"/></linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="url(#crBlueAdmin2)"/>
+            <rect x="0" y="54" width="64" height="10" fill="#22c55e"/>
+            <path d="M16 42V18h13c6.5 0 10.8 3.8 10.8 9.6 0 5.7-4.3 9.5-10.8 9.5H24v4.9H16zm8-13.2h4.4c2.8 0 4.5-1.5 4.5-3.7s-1.7-3.7-4.5-3.7H24v7.4z" fill="#ffffff"/>
+            <path d="M44 18l9 13-9 13h-7.5l9-13-9-13H44z" fill="#4ade80"/>
+          </svg>
+        </div> Invest Future
+      </div>
+      <nav class="nav">
+        <button class="btn-register" style="background:rgba(255,255,255,0.15)!important;color:white!important;">Admin</button>
+        <button onclick="adminLogout()">Logout</button>
+      </nav>
+    </header>
+
+    <div class="dash-main">
+      <div class="user-label">🛡️ ADMIN PANEL</div>
+      <h1 class="user-name" style="font-size:1.8rem;">Member Management</h1>
+      <p style="color:var(--text-muted); margin-bottom:1.5rem;">View users, confirm deposits, and move members through stages 1–9.</p>
+
+      <!-- Stats -->
+      <div class="cards-row" style="margin-bottom:1.5rem;">
+        <div class="card blue">
+          <div class="card-label">Total members</div>
+          <div class="card-value" id="adminStatTotal">0</div>
+        </div>
+        <div class="card amber">
+          <div class="card-label">Awaiting deposit</div>
+          <div class="card-value" id="adminStatPending">0</div>
+        </div>
+        <div class="card green">
+          <div class="card-label">Deposited</div>
+          <div class="card-value" id="adminStatDeposited">0</div>
+        </div>
+        <div class="card purple">
+          <div class="card-label">Completed (stage 9)</div>
+          <div class="card-value" id="adminStatComplete">0</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" style="justify-content:space-between;">
+          <span>All Members</span>
+          <button class="btn btn-outline" onclick="loadAdminUsers()" style="font-size:0.8rem;">Refresh</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="history-table" id="adminUsersTable">
+            <thead>
+              <tr>
+                <th>Name / Email</th>
+                <th>Nationality</th>
+                <th>Plan</th>
+                <th>Deposit</th>
+                <th>Stage</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminUsersBody">
+              <tr><td colspan="6" style="text-align:center; color:#9ca3af; padding:1.5rem;">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p style="margin-top:1.5rem; font-size:0.82rem; color:var(--text-muted); line-height:1.55;">
+        <strong>How to manage:</strong><br>
+        1. View each customer’s <strong>name, email, nationality and registration time</strong>.<br>
+        2. When they send USDT, click <strong>Confirm deposit</strong> — only then does their account show the deposit (they cannot confirm themselves).<br>
+        3. Move stages 1–9 with the dropdown as the cycle progresses.<br>
+        4. After maturity, enter the <strong>payout amount</strong> and click <strong>Save payout amount</strong> — that figure appears on the client’s balance / withdrawal as the amount to be sent to them.
+      </p>
+    </div>
+  </div>
+
+  <!-- Support Modal -->
+  <div class="modal-overlay" id="supportModal" onclick="if(event.target===this)closeSupport()">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeSupport()">×</button>
+      <div style="font-size:2rem; margin-bottom:0.5rem;">🟢</div>
+      <h3>Live Desk Support</h3>
+      <p>Speak directly with a Invest Future desk officer. We are online now.</p>
+      <div class="support-contact">
+        <div class="label">PHONE / WHATSAPP</div>
+        <div class="value"><a href="tel:+19202471179">+1 (920) 247-1179</a></div>
+      </div>
+      <div class="support-contact">
+        <div class="label">EMAIL</div>
+        <div class="value"><a href="mailto:investfuture96@gmail.com">investfuture96@gmail.com</a></div>
+      </div>
+      <button class="btn-primary" style="width:100%; margin-top:0.5rem;" onclick="window.open('https://wa.me/19202471179','_blank')">
+        Open WhatsApp Chat
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Navigation ----------
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const page = document.getElementById('page-' + name);
+      if (page) page.classList.add('active');
+      window.scrollTo(0, 0);
+
+      if (name === 'dashboard') {
+        loadUser();
+        renderMemberFlow();
+        loadStage();
+        startMemberFlowTimer();
+      }
+      if (name === 'admin') {
+        if (!sessionStorage.getItem('if_admin')) {
+          showPage('admin-login');
+          return;
+        }
+        loadAdminUsers();
+      }
+    }
+
+    // ---------- Support Modal ----------
+    function openSupport() {
+      document.getElementById('supportModal').classList.add('open');
+    }
+    function closeSupport() {
+      document.getElementById('supportModal').classList.remove('open');
+    }
+
+    // ---------- Progress Stages (1-9) ----------
+    const stageNames = [
+      '', 'Deposit', 'Approval', 'Tracking', 'Tax Fee', 'Tax Clearance',
+      'Withdrawal Fee', 'Fee Clearance', 'Disbursement', 'Complete'
+    ];
+    const stageMessages = {
+      1: 'Awaiting admin confirmation of your deposit…',
+      2: 'Admin confirmed your deposit. Plan approval in progress…',
+      3: 'Tracking live. Account figures are updating…',
+      4: 'Tax fee assessment required before continuing.',
+      5: 'Tax clearance in progress…',
+      6: 'Withdrawal fee must be cleared to unlock funds.',
+      7: 'Withdrawal fee clearance processing…',
+      8: 'Disbursement processing. Final release soon.',
+      9: 'Cycle complete. Payout amount set by admin — ready for release.'
+    };
+
+    function setStage(n) {
+      n = Math.max(1, Math.min(9, n));
+      localStorage.setItem('if_stage', n);
+
+      const steps = document.querySelectorAll('#progressSteps .step');
+      steps.forEach(s => {
+        const stage = parseInt(s.dataset.stage);
+        s.classList.remove('active', 'completed');
+        if (stage < n) s.classList.add('completed');
+        if (stage === n) s.classList.add('active');
+      });
+
+      const banner = document.getElementById('statusBanner');
+      if (banner) banner.textContent = stageMessages[n] || '';
+
+      // Unlock withdraw buttons on stage 9
+      ['btnWithdrawTop', 'btnWithdrawMain'].forEach(id => {
+        const wBtn = document.getElementById(id);
+        if (!wBtn) return;
+        if (n >= 9) {
+          wBtn.classList.remove('btn-disabled');
+          wBtn.disabled = false;
+          wBtn.textContent = id === 'btnWithdrawTop' ? 'Withdraw' : 'Withdraw Funds';
+          wBtn.onclick = () => alert('Demo: Withdrawal would be processed here.');
+        } else {
+          wBtn.classList.add('btn-disabled');
+          wBtn.disabled = true;
+          wBtn.textContent = id === 'btnWithdrawTop' ? 'Withdraw' : 'Withdraw Funds';
+          wBtn.onclick = null;
+        }
+      });
+
+      // Update history stage text if present
+      const histStage = document.querySelector('#historyBody td:last-child');
+      if (histStage) histStage.textContent = stageNames[n];
+    }
+
+    function loadStage() {
+      const saved = parseInt(localStorage.getItem('if_stage') || '1');
+      setStage(saved);
+    }
+
+    // When user clicks "I have sent the deposit – Confirm"
+    // Client only notifies — admin must confirm before stage advances
+    function clientClaimDeposit() {
+      try {
+        const cur = JSON.parse(localStorage.getItem('if_user') || '{}');
+        if (!cur.email) {
+          alert('Please log in first.');
+          return;
+        }
+        const users = getRegisteredUsers();
+        const u = users.find(x => x.email === cur.email);
+        if (u) {
+          u.claimPending = true;
+          u.claimAt = new Date().toISOString();
+          saveRegisteredUsers(users);
+        }
+        localStorage.setItem('if_claim_pending', '1');
+        const note = document.getElementById('depositClaimNote');
+        if (note) {
+          note.style.color = '#92400e';
+          note.textContent = 'Notification sent. Waiting for admin to confirm your deposit on the system. Your balance stays $0.00 until admin confirms.';
+        }
+        alert('Your payment notice was sent to admin. Please wait for admin confirmation. It will then reflect on your account.');
+      } catch (e) {
+        alert('Could not notify admin. Try again.');
+      }
+    }
+
+    // ---------- Auth ----------
+    function getRegisteredUsers() {
+      try {
+        const raw = localStorage.getItem('if_users');
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveRegisteredUsers(users) {
+      localStorage.setItem('if_users', JSON.stringify(users));
+    }
+
+    // Use backend API when site is hosted; falls back to localStorage offline
+    const API = '';
+
+    async function api(path, options = {}) {
+      const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+      const token = sessionStorage.getItem('if_admin_token');
+      if (token) headers['x-admin-token'] = token;
+      const res = await fetch(API + path, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Request failed');
+      return data;
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const nationality = document.getElementById('regNationality').value;
+      const password = document.getElementById('regPassword').value;
+      const confirm = document.getElementById('regConfirm').value;
+      const err = document.getElementById('regError');
+
+      if (!name || !email || !nationality || password.length < 6) {
+        err.style.display = 'block';
+        err.textContent = 'Please fill all fields including nationality (password min 6 characters).';
+        return;
+      }
+      if (password !== confirm) {
+        err.style.display = 'block';
+        err.textContent = 'Passwords do not match.';
+        return;
+      }
+      err.style.display = 'none';
+
+      try {
+        const data = await api('/api/register', {
+          method: 'POST',
+          body: JSON.stringify({ name, email, nationality, password })
+        });
+        localStorage.setItem('if_user', JSON.stringify({
+          id: data.user.id, name: data.user.name, email: data.user.email,
+          nationality: data.user.nationality || '', loggedIn: true
+        }));
+        showPage('dashboard');
+        return;
+      } catch (apiErr) {
+        // Offline / static fallback
+        const users = getRegisteredUsers();
+        if (users.find(u => u.email === email)) {
+          err.style.display = 'block';
+          err.textContent = 'This email is already registered. Please log in instead.';
+          return;
+        }
+        users.push({
+          name, email, nationality, password,
+          plan: null, stage: 1, deposited: false, depositAmount: 0, claimAmount: 0,
+          claimPending: false, createdAt: new Date().toISOString()
+        });
+        saveRegisteredUsers(users);
+        localStorage.setItem('if_user', JSON.stringify({ name, email, nationality, loggedIn: true }));
+        showPage('dashboard');
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginPassword').value;
+      const err = document.getElementById('loginError');
+
+      if (!email || !password) {
+        err.style.display = 'block';
+        err.textContent = 'Please enter email and password.';
+        return;
+      }
+
+      try {
+        const data = await api('/api/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
+        localStorage.setItem('if_user', JSON.stringify({
+          id: data.user.id, name: data.user.name, email: data.user.email,
+          nationality: data.user.nationality || '', loggedIn: true
+        }));
+        if (data.user.plan) localStorage.setItem('if_plan', JSON.stringify(data.user.plan));
+        if (data.user.stage) localStorage.setItem('if_stage', String(data.user.stage));
+        if (data.user.deposited) localStorage.setItem('if_deposited', '1');
+        showPage('dashboard');
+        return;
+      } catch (apiErr) {
+        const users = getRegisteredUsers();
+        const found = users.find(u => u.email === email);
+        if (!found) {
+          err.style.display = 'block';
+          err.textContent = apiErr.message || 'No account found. Please register first.';
+          return;
+        }
+        if (found.password !== password) {
+          err.style.display = 'block';
+          err.textContent = 'Incorrect password. Please try again.';
+          return;
+        }
+        err.style.display = 'none';
+        localStorage.setItem('if_user', JSON.stringify({
+          name: found.name, email: found.email,
+          nationality: found.nationality || '', loggedIn: true
+        }));
+        showPage('dashboard');
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('if_user');
+      showPage('login');
+    }
+
+    function loadUser() {
+      try {
+        const raw = localStorage.getItem('if_user');
+        if (raw) {
+          const user = JSON.parse(raw);
+          if (user && user.loggedIn) {
+            document.getElementById('userName').textContent = user.name || 'Member Account';
+            document.getElementById('userEmail').textContent = user.email || '';
+            const natEl = document.getElementById('userNationality');
+            if (natEl) natEl.textContent = user.nationality ? 'Nationality: ' + user.nationality : '';
+            updatePlanUI();
+            return;
+          }
+        }
+      } catch (e) {}
+      showPage('login');
+    }
+
+    // ---------- Plan selection ----------
+    function selectPlan(deposit, target, duration, name) {
+      localStorage.setItem('if_plan', JSON.stringify({ deposit, target, duration, name }));
+      localStorage.setItem('if_stage', '1');
+      localStorage.removeItem('if_deposited');
+      // Sync to registered user for admin panel
+      try {
+        const cur = JSON.parse(localStorage.getItem('if_user') || '{}');
+        if (cur.email) {
+          const users = getRegisteredUsers();
+          const u = users.find(x => x.email === cur.email);
+          if (u) {
+            u.plan = { deposit, target, duration, name };
+            u.stage = 1;
+            u.deposited = false;
+            u.depositAmount = 0;
+            saveRegisteredUsers(users);
+          }
+        }
+      } catch (e) {}
+      showPlanDetails(deposit, target, duration, name);
+    }
+
+    function showPlanDetails(deposit, target, duration, name) {
+      const fmt = n => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const profit = target - deposit;
+      const multiple = (target / deposit).toFixed(1);
+
+      document.getElementById('pdName').textContent = name;
+      document.getElementById('pdDuration').textContent = 'Duration: ' + duration;
+      document.getElementById('pdDeposit').textContent = fmt(deposit);
+      document.getElementById('pdTarget').textContent = fmt(target);
+      document.getElementById('pdRowDeposit').textContent = fmt(deposit);
+      document.getElementById('pdProfit').textContent = '+' + fmt(profit);
+      document.getElementById('pdRowTarget').textContent = fmt(target);
+      document.getElementById('pdMultiple').textContent = multiple + '×';
+      document.getElementById('pdRowDuration').textContent = duration;
+
+      document.getElementById('payAmount').textContent = fmt(deposit);
+      document.getElementById('payTarget').textContent = fmt(target);
+
+      // reset view to profit card
+      document.getElementById('planProfitCard').style.display = 'block';
+      document.getElementById('planPaymentCard').style.display = 'none';
+
+      showPage('plan-details');
+    }
+
+    function confirmPlanAndShowPayment() {
+      // show payment method
+      document.getElementById('planProfitCard').style.display = 'none';
+      document.getElementById('planPaymentCard').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    function afterPaymentConfirm() {
+      // Client finished payment page — still waits for admin
+      localStorage.setItem('if_claim_pending', '1');
+      const user = localStorage.getItem('if_user');
+      if (user) {
+        try {
+          const cur = JSON.parse(user);
+          const users = getRegisteredUsers();
+          const u = users.find(x => x.email === cur.email);
+          if (u) {
+            u.claimPending = true;
+            u.claimAt = new Date().toISOString();
+            saveRegisteredUsers(users);
+          }
+        } catch (e) {}
+        showPage('dashboard');
+        updatePlanUI();
+        loadStage();
+      } else {
+        showPage('register');
+      }
+    }
+
+    function getCurrentMemberRecord() {
+      try {
+        const cur = JSON.parse(localStorage.getItem('if_user') || '{}');
+        if (!cur.email) return null;
+        const users = getRegisteredUsers();
+        return users.find(x => x.email === cur.email) || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function updatePlanUI() {
+      let plan = { deposit: 50, target: 315, duration: '24 Hours', name: 'Starter Growth Plan' };
+      try {
+        const raw = localStorage.getItem('if_plan');
+        if (raw) plan = JSON.parse(raw);
+      } catch (e) {}
+
+      const member = getCurrentMemberRecord();
+      if (member && member.plan) plan = member.plan;
+
+      // Admin confirmation drives these flags
+      const deposited = !!(member && member.deposited) || localStorage.getItem('if_deposited') === '1';
+      const payout = member && member.payoutAmount != null ? Number(member.payoutAmount) : 0;
+      const stage = member && member.stage ? Number(member.stage) : parseInt(localStorage.getItem('if_stage') || '1');
+      if (member && member.stage) localStorage.setItem('if_stage', String(member.stage));
+      if (deposited) localStorage.setItem('if_deposited', '1');
+
+      const fmt = n => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      document.getElementById('dashPlanName').textContent = plan.name;
+      document.getElementById('dashDeposit').textContent = deposited ? fmt(plan.deposit) : '$0.00';
+      // Balance / withdraw show payout only when admin has set it (after maturity)
+      const showPayout = payout > 0;
+      document.getElementById('dashBalance').textContent = showPayout ? fmt(payout) : (deposited ? fmt(plan.deposit) : '$0.00');
+      document.getElementById('infoDeposit').textContent = fmt(plan.deposit);
+      document.getElementById('infoTarget').textContent = fmt(plan.target);
+      document.getElementById('infoDuration').textContent = plan.duration;
+      document.getElementById('infoRequired').textContent = fmt(plan.deposit) + ' required';
+      document.getElementById('withdrawBalance').textContent = showPayout ? fmt(payout) : '$0.00';
+      document.getElementById('msStart').textContent = deposited ? fmt(plan.deposit) : '$0.00';
+      document.getElementById('msCurrent').textContent = showPayout ? fmt(payout) : (deposited ? fmt(plan.deposit) : '$0.00');
+      document.getElementById('msTarget').textContent = fmt(plan.target);
+      document.getElementById('tradeDeposit').textContent = deposited ? fmt(plan.deposit) : '$0.00';
+      document.getElementById('tradeCurrent').textContent = showPayout ? fmt(payout) : '$0.00';
+
+      const note = document.getElementById('depositClaimNote');
+      if (note) {
+        if (deposited) {
+          note.style.color = '#166534';
+          note.textContent = 'Admin has confirmed your deposit. Your account has been updated.';
+        } else if (member && member.claimPending) {
+          note.style.color = '#92400e';
+          note.textContent = 'Waiting for admin to confirm your deposit. Balance remains $0.00 until confirmed.';
+        } else {
+          note.textContent = '';
+        }
+      }
+
+      const statusEl = document.querySelector('.card.purple .card-value');
+      if (statusEl) {
+        if (deposited && stage >= 9) statusEl.textContent = 'Ready to pay';
+        else if (deposited) statusEl.textContent = 'Confirmed';
+        else if (member && member.claimPending) statusEl.textContent = 'Awaiting admin';
+        else statusEl.textContent = 'Pending';
+      }
+
+      if (deposited) {
+        recordDepositHistory(plan, false);
+      } else {
+        const body = document.getElementById('historyBody');
+        if (body) {
+          body.innerHTML = `<tr id="historyEmptyRow">
+            <td colspan="6" style="text-align:center; color:#9ca3af; padding:1.2rem;">
+              No transactions yet. Shows $0.00 until admin confirms your deposit.
+            </td>
+          </tr>`;
+        }
+      }
+
+      // Apply stage from admin
+      if (typeof setStage === 'function') setStage(stage);
+    }
+
+    function recordDepositHistory(plan, setFlag) {
+      if (!plan) {
+        try {
+          const raw = localStorage.getItem('if_plan');
+          plan = raw ? JSON.parse(raw) : { deposit: 50, target: 315, name: 'Starter Growth Plan' };
+        } catch (e) {
+          plan = { deposit: 50, target: 315, name: 'Starter Growth Plan' };
+        }
+      }
+      if (setFlag !== false) localStorage.setItem('if_deposited', '1');
+
+      const fmt = n => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const body = document.getElementById('historyBody');
+      if (!body) return;
+      body.innerHTML = `
+        <tr>
+          <td>${new Date().toLocaleString()}</td>
+          <td>${plan.name}</td>
+          <td>${fmt(plan.deposit)}</td>
+          <td>${fmt(plan.target)}</td>
+          <td><span class="badge badge-pending">Pending</span></td>
+          <td>Deposit</td>
+        </tr>`;
+
+      // Also update amount deposited card
+      const depEl = document.getElementById('dashDeposit');
+      if (depEl) depEl.textContent = fmt(plan.deposit);
+      const tradeDep = document.getElementById('tradeDeposit');
+      if (tradeDep) tradeDep.textContent = fmt(plan.deposit);
+    }
+
+    // ---------- Copy address ----------
+    function copyAddr(id, btn) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied');
+        btn.innerText = 'Copied';
+        setTimeout(() => { btn.classList.remove('copied'); btn.innerText = 'Copy'; }, 1800);
+      });
+    }
+
+    // ---------- Live member flow ----------
+    // ---------- Live Member Flow (auto every 2 min, unique names) ----------
+    const memberPool = [
+      { name: 'Renee A.', email: 'renee.a@studentmail.com', initials: 'RA' },
+      { name: 'Marcus H.', email: 'marcus.h@uni.edu', initials: 'MH' },
+      { name: 'Samira J.', email: 'samira.j@campus.edu', initials: 'SJ' },
+      { name: 'Elena R.', email: 'elena.r@college.edu', initials: 'ER' },
+      { name: 'Darius C.', email: 'darius.c@uni.edu', initials: 'DC' },
+      { name: 'Noah D.', email: 'noah.d@student.edu', initials: 'ND' },
+      { name: 'Kofi J.', email: 'kofi.j@uni.ac.uk', initials: 'KJ' },
+      { name: 'Priya S.', email: 'priya.s@campus.in', initials: 'PS' },
+      { name: 'Jamal W.', email: 'jamal.w@college.edu', initials: 'JW' },
+      { name: 'Aisha B.', email: 'aisha.b@student.ae', initials: 'AB' },
+      { name: 'Lucas M.', email: 'lucas.m@uni.edu', initials: 'LM' },
+      { name: 'Fatima K.', email: 'fatima.k@campus.edu', initials: 'FK' },
+      { name: 'Chen W.', email: 'chen.w@uni.edu.cn', initials: 'CW' },
+      { name: 'Sofia L.', email: 'sofia.l@student.es', initials: 'SL' },
+      { name: 'Omar T.', email: 'omar.t@college.edu', initials: 'OT' },
+      { name: 'Yuki N.', email: 'yuki.n@uni.jp', initials: 'YN' },
+      { name: 'Amara O.', email: 'amara.o@student.ng', initials: 'AO' },
+      { name: 'Diego R.', email: 'diego.r@uni.mx', initials: 'DR' },
+      { name: 'Hana P.', email: 'hana.p@campus.kr', initials: 'HP' },
+      { name: 'Tariq M.', email: 'tariq.m@student.pk', initials: 'TM' },
+      { name: 'Lina V.', email: 'lina.v@uni.edu', initials: 'LV' },
+      { name: 'Kwame A.', email: 'kwame.a@student.gh', initials: 'KA' },
+      { name: 'Nina G.', email: 'nina.g@college.edu', initials: 'NG' },
+      { name: 'Rajiv P.', email: 'rajiv.p@uni.edu', initials: 'RP' },
+      { name: 'Zara H.', email: 'zara.h@campus.edu', initials: 'ZH' },
+      { name: 'Ethan B.', email: 'ethan.b@student.edu', initials: 'EB' },
+      { name: 'Maya C.', email: 'maya.c@uni.edu', initials: 'MC' },
+      { name: 'Ibrahim S.', email: 'ibrahim.s@college.edu', initials: 'IS' },
+      { name: 'Chloe F.', email: 'chloe.f@student.fr', initials: 'CF' },
+      { name: 'Andre V.', email: 'andre.v@uni.br', initials: 'AV' },
+    ];
+
+    const withdrawAmounts = [
+      50335, 98150, 49610, 19780, 4875, 9690, 25000, 12550,
+      31500, 6300, 9450, 18900, 50000, 10000, 7500, 15720,
+      32400, 8400, 22100, 41200, 5600, 17850, 29300, 6650
+    ];
+
+    let usedMemberIndexes = [];
+    let liveFlowItems = [];
+    let memberFlowTimer = null;
+
+    function pickUniqueMember() {
+      if (usedMemberIndexes.length >= memberPool.length) {
+        usedMemberIndexes = []; // reset only after all used
+      }
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * memberPool.length);
+      } while (usedMemberIndexes.includes(idx));
+      usedMemberIndexes.push(idx);
+      return memberPool[idx];
+    }
+
+    function randomAmount() {
+      const a = withdrawAmounts[Math.floor(Math.random() * withdrawAmounts.length)];
+      return '$' + a.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function timeLabel(minutesAgo) {
+      if (minutesAgo < 1) return 'Just now';
+      if (minutesAgo === 1) return '1m ago';
+      return minutesAgo + 'm ago';
+    }
+
+    function renderMemberFlow() {
+      const flow = document.getElementById('member-flow');
+      if (!flow) return;
+
+      // seed initial list if empty
+      if (liveFlowItems.length === 0) {
+        for (let i = 0; i < 6; i++) {
+          const m = pickUniqueMember();
+          liveFlowItems.push({
+            ...m,
+            action: i % 2 === 0 ? 'Withdrawing' : 'Depositing',
+            amount: randomAmount(),
+            type: i % 2 === 0 ? 'withdraw' : 'deposit',
+            minutesAgo: (i + 1) * 2
+          });
+        }
+      }
+
+      flow.innerHTML = '';
+      liveFlowItems.forEach(m => {
+        const el = document.createElement('div');
+        el.className = 'member-item';
+        el.innerHTML = `
+          <div class="member-avatar">${m.initials}</div>
+          <div style="flex:1; min-width:0;">
+            <div class="member-name">${m.name}</div>
+            <div style="font-size:0.72rem; color:#9ca3af; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${m.email}</div>
+            <div class="member-action">${m.action} <span class="member-amount ${m.type}">${m.amount}</span></div>
+          </div>
+          <div class="member-time">${timeLabel(m.minutesAgo)}</div>
+        `;
+        flow.appendChild(el);
+      });
+    }
+
+    function addLiveWithdrawal() {
+      // age existing items
+      liveFlowItems.forEach(item => { item.minutesAgo += 2; });
+
+      // add new unique withdrawal at top
+      const m = pickUniqueMember();
+      liveFlowItems.unshift({
+        ...m,
+        action: 'Withdrawing',
+        amount: randomAmount(),
+        type: 'withdraw',
+        minutesAgo: 0
+      });
+
+      // keep list to max 10
+      if (liveFlowItems.length > 10) liveFlowItems = liveFlowItems.slice(0, 10);
+
+      renderMemberFlow();
+    }
+
+    function startMemberFlowTimer() {
+      if (memberFlowTimer) clearInterval(memberFlowTimer);
+      // every 2 minutes (120000 ms)
+      memberFlowTimer = setInterval(addLiveWithdrawal, 120000);
+    }
+
+    // ---------- Admin Panel ----------
+    const ADMIN_EMAIL = 'admin@investfuture.com';
+    const ADMIN_PASS = 'Admin123!';
+    const STAGE_NAMES = ['', 'Deposit', 'Approval', 'Tracking', 'Tax Fee', 'Tax Clearance', 'Withdrawal Fee', 'Fee Clearance', 'Disbursement', 'Complete'];
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = (document.getElementById('adminEmail').value || '').trim().toLowerCase();
+      const password = document.getElementById('adminPassword').value || '';
+      const err = document.getElementById('adminLoginError');
+      try {
+        const data = await api('/api/admin/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
+        sessionStorage.setItem('if_admin', '1');
+        sessionStorage.setItem('if_admin_token', data.token);
+        err.style.display = 'none';
+        showPage('admin');
+        return;
+      } catch (apiErr) {
+        if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
+          sessionStorage.setItem('if_admin', '1');
+          err.style.display = 'none';
+          showPage('admin');
+          return;
+        }
+        err.style.display = 'block';
+        err.textContent = apiErr.message || 'Invalid admin email or password.';
+      }
+    }
+
+    function adminLogout() {
+      sessionStorage.removeItem('if_admin');
+      sessionStorage.removeItem('if_admin_token');
+      showPage('admin-login');
+    }
+
+    function getAdminUserList() {
+      // Prefer local registered users (same browser)
+      try {
+        const raw = localStorage.getItem('if_users');
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveAdminUserList(users) {
+      localStorage.setItem('if_users', JSON.stringify(users));
+    }
+
+    let adminUsersCache = [];
+
+    async function loadAdminUsers() {
+      const body = document.getElementById('adminUsersBody');
+      const fmt = n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      let users = [];
+      try {
+        const data = await api('/api/admin/users');
+        users = data.users || [];
+      } catch (e) {
+        users = getAdminUserList();
+      }
+      adminUsersCache = users;
+
+      document.getElementById('adminStatTotal').textContent = users.length;
+      document.getElementById('adminStatPending').textContent = users.filter(u => (u.claimPending || u.plan) && !u.deposited).length;
+      document.getElementById('adminStatDeposited').textContent = users.filter(u => u.deposited).length;
+      document.getElementById('adminStatComplete').textContent = users.filter(u => (u.stage || 1) >= 9).length;
+
+      if (!users.length) {
+        body.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#9ca3af; padding:1.5rem;">
+          No members yet. When customers register on this hosted site, they appear here automatically.
+        </td></tr>`;
+        return;
+      }
+
+      body.innerHTML = users.map((u, i) => {
+        const planName = u.plan ? u.plan.name : '—';
+        const planDep = u.plan ? u.plan.deposit : 0;
+        const planTarget = u.plan ? u.plan.target : 0;
+        const stage = u.stage || 1;
+        const stageOpts = [1,2,3,4,5,6,7,8,9].map(s =>
+          `<option value="${s}" ${s === stage ? 'selected' : ''}>${s}. ${STAGE_NAMES[s]}</option>`
+        ).join('');
+        const payoutVal = u.payoutAmount != null ? u.payoutAmount : (planTarget || '');
+        const statusBadge = u.deposited
+          ? '<span style="color:#16a34a;font-weight:600;">Admin confirmed</span>'
+          : (u.claimPending ? '<span style="color:#d97706;font-weight:600;">Client claims sent — confirm</span>' : '<span style="color:#9ca3af;">No deposit yet</span>');
+        return `<tr>
+          <td>
+            <strong>${u.name || '—'}</strong><br>
+            <span style="font-size:0.78rem; color:#6b7280;">${u.email || ''}</span><br>
+            <span style="font-size:0.72rem; color:#9ca3af;">Joined: ${u.createdAt ? new Date(u.createdAt).toLocaleString() : '—'}</span>
+          </td>
+          <td>${u.nationality || '—'}</td>
+          <td style="font-size:0.82rem;">${planName}<br><span style="color:#6b7280;">Req: ${fmt(planDep)} → Target ${fmt(planTarget)}</span></td>
+          <td>
+            ${u.deposited ? fmt(planDep) : '$0.00'}<br>
+            ${statusBadge}
+          </td>
+          <td>
+            <select onchange="adminSetStage(${i}, this.value)" style="padding:0.35rem; border-radius:6px; border:1px solid #e0d6c8; font-size:0.8rem; margin-bottom:0.4rem; width:100%;">
+              ${stageOpts}
+            </select>
+            <div style="font-size:0.72rem; color:#6b7280; margin-bottom:0.25rem;">Payout to client ($)</div>
+            <input type="number" id="payoutInput${i}" value="${payoutVal}" min="0" step="0.01"
+              style="width:100%; padding:0.35rem; border:1px solid #e0d6c8; border-radius:6px; font-size:0.8rem; margin-bottom:0.35rem;"
+              placeholder="Amount to send">
+            <button class="btn btn-outline" style="font-size:0.72rem; padding:0.25rem 0.5rem; width:100%;" onclick="adminSetPayout(${i})">Save payout amount</button>
+          </td>
+          <td style="white-space:nowrap;">
+            ${!u.deposited ? `<button class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem; background:#dcfce7; border-color:#86efac; margin-bottom:0.3rem;" onclick="adminMarkDeposited(${i})">Confirm deposit</button><br>` : '<span style="font-size:0.75rem;color:#16a34a;">Deposit OK</span><br>'}
+            <button class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem; color:#b91c1c; border-color:#fecaca;" onclick="adminDeleteUser(${i})">Delete</button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function adminSetStage(index, stage) {
+      const u = adminUsersCache[index];
+      if (!u) return;
+      const body = { stage: Number(stage) };
+      if (Number(stage) >= 2) body.deposited = true;
+      try {
+        if (u.id) await api('/api/admin/users/' + u.id, { method: 'PATCH', body: JSON.stringify(body) });
+        else {
+          const users = getAdminUserList();
+          const local = users.find(x => x.email === u.email);
+          if (local) { local.stage = Number(stage); if (Number(stage) >= 2) local.deposited = true; saveAdminUserList(users); }
+        }
+      } catch (e) {
+        const users = getAdminUserList();
+        const local = users.find(x => x.email === u.email);
+        if (local) { local.stage = Number(stage); if (Number(stage) >= 2) local.deposited = true; saveAdminUserList(users); }
+      }
+      loadAdminUsers();
+    }
+
+    async function adminMarkDeposited(index) {
+      const u = adminUsersCache[index];
+      if (!u) return;
+      const patch = {
+        deposited: true,
+        claimPending: false,
+        stage: Math.max(u.stage || 1, 2),
+        depositAmount: u.plan ? u.plan.deposit : (u.depositAmount || 0)
+      };
+      try {
+        if (u.id) await api('/api/admin/users/' + u.id, { method: 'PATCH', body: JSON.stringify(patch) });
+        else {
+          const users = getAdminUserList();
+          const local = users.find(x => x.email === u.email);
+          if (local) Object.assign(local, patch);
+          saveAdminUserList(users);
+        }
+      } catch (e) {
+        const users = getAdminUserList();
+        const local = users.find(x => x.email === u.email);
+        if (local) Object.assign(local, patch);
+        saveAdminUserList(users);
+      }
+      loadAdminUsers();
+      alert('Deposit confirmed for ' + (u.name || u.email) + '. Their account will now show the confirmed deposit.');
+    }
+
+    async function adminSetPayout(index) {
+      const u = adminUsersCache[index];
+      if (!u) return;
+      const input = document.getElementById('payoutInput' + index);
+      const amount = parseFloat(input && input.value);
+      if (isNaN(amount) || amount < 0) {
+        alert('Enter a valid payout amount.');
+        return;
+      }
+      const patch = {
+        payoutAmount: amount,
+        balance: amount,
+        stage: Math.max(u.stage || 1, 8)
+      };
+      try {
+        if (u.id) await api('/api/admin/users/' + u.id, { method: 'PATCH', body: JSON.stringify(patch) });
+        else {
+          const users = getAdminUserList();
+          const local = users.find(x => x.email === u.email);
+          if (local) Object.assign(local, patch);
+          saveAdminUserList(users);
+        }
+      } catch (e) {
+        const users = getAdminUserList();
+        const local = users.find(x => x.email === u.email);
+        if (local) Object.assign(local, patch);
+        saveAdminUserList(users);
+      }
+      loadAdminUsers();
+      alert('Payout amount $' + amount.toFixed(2) + ' saved for ' + (u.name || u.email) + '.');
+    }
+
+    async function adminDeleteUser(index) {
+      const u = adminUsersCache[index];
+      if (!u) return;
+      if (!confirm('Delete member ' + (u.name || u.email) + '?')) return;
+      try {
+        if (u.id) await api('/api/admin/users/' + u.id, { method: 'DELETE' });
+        else {
+          const users = getAdminUserList().filter(x => x.email !== u.email);
+          saveAdminUserList(users);
+        }
+      } catch (e) {
+        const users = getAdminUserList().filter(x => x.email !== u.email);
+        saveAdminUserList(users);
+      }
+      loadAdminUsers();
+    }
+
+    // On first load check if already logged in
+    (function init() {
+      try {
+        const raw = localStorage.getItem('if_user');
+        if (raw) {
+          const user = JSON.parse(raw);
+          if (user && user.loggedIn) {
+            showPage('dashboard');
+            return;
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>
